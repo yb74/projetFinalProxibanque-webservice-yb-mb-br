@@ -30,6 +30,14 @@ public class Consoler {
 	public Consoler() {
 	}
 
+	public Consoler(Long id, @NotEmpty(message = "the name of the consoler is necessary") String name,
+			@NotEmpty(message = "the first name of the client is necessary") String firstName, Set<Client> clients) {
+		this.id = id;
+		this.name = name;
+		this.firstName = firstName;
+		this.clients = clients;
+	}
+
 	public Long getId() {
 		return id;
 	}

@@ -6,14 +6,14 @@ import com.example.demo.model.Client;
 
 public class ConsolerDTO {
 	private Long id;
-	private String nom;
-	private String prenom;
+	private String name;
+	private String firstName;
 	private Set<Client> clients;
 
-	public ConsolerDTO(Long id, String nom, String prenom, Set<Client> clients) {
+	public ConsolerDTO(Long id, String name, String firstName, Set<Client> clients) {
 		this.id = id;
-		this.nom = nom;
-		this.prenom = prenom;
+		this.name = name;
+		this.firstName = firstName;
 		this.clients = clients;
 	}
 
@@ -25,20 +25,20 @@ public class ConsolerDTO {
 		this.id = id;
 	}
 
-	public String getNom() {
-		return nom;
+	public String getName() {
+		return name;
 	}
 
-	public void setNom(String nom) {
-		this.nom = nom;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getPrenom() {
-		return prenom;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setPrenom(String prenom) {
-		this.prenom = prenom;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
 	public Set<Client> getClients() {
