@@ -74,8 +74,8 @@ public class ClientController {
 	    return new ResponseEntity<>(updatedClient, HttpStatus.OK); // Return 200 OK with the updated client
 	}
 	
-	@DeleteMapping
-	public ResponseEntity<Client> removeClient(@RequestParam Long clientId) {
+	@DeleteMapping("/clientId")
+	public ResponseEntity<Client> removeClient(@PathVariable Long clientId) {
 		Optional<Client> clientOptional = clientService.getClientById(clientId);
 
 	    if (clientOptional.isEmpty()) {
