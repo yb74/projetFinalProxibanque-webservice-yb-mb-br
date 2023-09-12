@@ -26,7 +26,7 @@ public class Client {
 	@NotEmpty(message = "the adress name of the client is necessary")
 	private String adress;
 
-	@NotEmpty(message = "the zip code of the client is necessary")
+//	@NotEmpty(message = "the zip code of the client is necessary")
 	private int zipCode;
 
 	@NotEmpty(message = "the city of the client is necessary")
@@ -37,7 +37,7 @@ public class Client {
 
 	@JsonIgnore
 	@ManyToOne(cascade = { CascadeType.PERSIST })
-	@JoinColumn(name = "conseiller_id")
+	@JoinColumn(name = "consoler_id")
 	private Consoler consoler;
 
 	public Client() {
@@ -53,6 +53,15 @@ public class Client {
 		this.city = city;
 		this.phoneNumber = phoneNumber;
 		this.consoler = consoler;
+	}
+
+	public Client(String name, String firstName, String adress, int zipCode, String city, String phoneNumber) {
+		this.name = name;
+		this.firstName = firstName;
+		this.adress = adress;
+		this.zipCode = zipCode;
+		this.city = city;
+		this.phoneNumber = phoneNumber;
 	}
 
 	public Long getId() {

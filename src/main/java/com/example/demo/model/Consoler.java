@@ -24,18 +24,22 @@ public class Consoler {
 	@NotEmpty(message = "the first name of the client is necessary")
 	private String firstName;
 
-	@OneToMany(mappedBy = "conseiller", cascade = { CascadeType.PERSIST })
+	@OneToMany(mappedBy = "consoler", cascade = { CascadeType.PERSIST })
 	private Set<Client> clients = new HashSet<>();
 
 	public Consoler() {
 	}
 
-	public Consoler(Long id, @NotEmpty(message = "the name of the consoler is necessary") String name,
-			@NotEmpty(message = "the first name of the client is necessary") String firstName, Set<Client> clients) {
+	public Consoler(Long id, String name, String firstName, Set<Client> clients) {
 		this.id = id;
 		this.name = name;
 		this.firstName = firstName;
 		this.clients = clients;
+	}
+	
+	public Consoler(String name, String firstName) {
+		this.name = name;
+		this.firstName = firstName;
 	}
 
 	public Long getId() {
