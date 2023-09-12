@@ -1,43 +1,45 @@
 package com.example.demo.service;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+
+import com.example.demo.repository.ClientRepository;
 
 import ch.qos.logback.core.net.server.Client;
 
 @Service
 public class ClientServiceImpl implements ClientService {
+	private final ClientRepository clientRepository;
+
+	public ClientServiceImpl(ClientRepository clientRepository) {
+		this.clientRepository = clientRepository;
+	}
 
 	@Override
 	public List<Client> getAllClients() {
-		// TODO Auto-generated method stub
-		return null;
+		return clientRepository.findAll();
 	}
 
 	@Override
-	public Client getClientById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<Client> getClientById(Long id) {
+		return clientRepository.findById(id);
 	}
 
 	@Override
-	public Set<Client> saveClient(Client client) {
-		// TODO Auto-generated method stub
-		return null;
+	public Client saveClient(Client client) {
+		return clientRepository.save(client);
 	}
 
 	@Override
 	public Client updateClient(Client client) {
-		// TODO Auto-generated method stub
-		return null;
+		return clientRepository.save(client);
 	}
 
 	@Override
 	public void deleteConsoler(Long id) {
-		// TODO Auto-generated method stub
-		
+		clientRepository.deleteById(id);
 	}
 
 }

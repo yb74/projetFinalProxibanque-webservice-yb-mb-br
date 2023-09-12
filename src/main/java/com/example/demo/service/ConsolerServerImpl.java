@@ -1,43 +1,45 @@
 package com.example.demo.service;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Consoler;
+import com.example.demo.repository.ConsolerRepository;
 
 @Service
 public class ConsolerServerImpl implements ConsolerServer {
 
+	private final ConsolerRepository consolerRepository;
+
+	public ConsolerServerImpl(ConsolerRepository consolerRepository) {
+		this.consolerRepository = consolerRepository;
+	}
+
 	@Override
 	public List<Consoler> getAllConsolers() {
-		// TODO Auto-generated method stub
-		return null;
+		return consolerRepository.findAll();
 	}
 
 	@Override
-	public Consoler getConsolerById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<Consoler> getConsolerById(Long id) {
+		return consolerRepository.findById(id);
 	}
 
 	@Override
-	public Set<Consoler> saveConsoler(Consoler consoler) {
-		// TODO Auto-generated method stub
-		return null;
+	public Consoler saveConsoler(Consoler consoler) {
+		return consolerRepository.save(consoler);
 	}
 
 	@Override
 	public Consoler updateConsoler(Consoler conseiller) {
-		// TODO Auto-generated method stub
-		return null;
+		return consolerRepository.save(conseiller);
 	}
 
 	@Override
 	public void deleteConsoler(Long id) {
-		// TODO Auto-generated method stub
-		
+		consolerRepository.deleteById(id);
 	}
 
 }
