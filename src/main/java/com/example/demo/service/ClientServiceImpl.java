@@ -5,12 +5,12 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.model.Client;
 import com.example.demo.repository.ClientRepository;
-
-import ch.qos.logback.core.net.server.Client;
 
 @Service
 public class ClientServiceImpl implements ClientService {
+
 	private final ClientRepository clientRepository;
 
 	public ClientServiceImpl(ClientRepository clientRepository) {
@@ -38,8 +38,9 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	@Override
-	public void deleteConsoler(Long id) {
+	public void deleteClientById(Long id) {
 		clientRepository.deleteById(id);
+		;
 	}
 
 }

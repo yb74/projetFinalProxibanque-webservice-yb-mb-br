@@ -1,25 +1,26 @@
 package com.example.demo.service;
 
 import java.util.List;
+
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.entity.Consoler;
+import com.example.demo.model.Consoler;
 import com.example.demo.repository.ConsolerRepository;
 
 @Service
-public class ConsolerServerImpl implements ConsolerServer {
+public class ConsolerServiceImpl implements ConsolerService {
 
 	private final ConsolerRepository consolerRepository;
 
-	public ConsolerServerImpl(ConsolerRepository consolerRepository) {
+	public ConsolerServiceImpl(ConsolerRepository consolerRepository) {
 		this.consolerRepository = consolerRepository;
 	}
 
 	@Override
 	public List<Consoler> getAllConsolers() {
-		return consolerRepository.findAll();
+		return (List<Consoler>) consolerRepository.findAll();
 	}
 
 	@Override

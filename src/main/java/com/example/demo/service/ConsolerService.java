@@ -3,9 +3,9 @@ package com.example.demo.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.demo.entity.Consoler;
+import com.example.demo.model.Consoler;
 
-public interface ConsolerServer {
+public interface ConsolerService {
 	List<Consoler> getAllConsolers();
 
 	Optional<Consoler> getConsolerById(Long id);

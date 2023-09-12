@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -16,25 +16,25 @@ public class Client {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@NotEmpty(message = "the name of the client is necessary")
 	private String name;
-	
+
 	@NotEmpty(message = "the first name of the client is necessary")
 	private String firstName;
-	
+
 	@NotEmpty(message = "the adress name of the client is necessary")
 	private String adress;
-	
+
 	@NotEmpty(message = "the zip code of the client is necessary")
 	private int zipCode;
-	
+
 	@NotEmpty(message = "the city of the client is necessary")
 	private String city;
-	
+
 	@NotEmpty(message = "the phone number of the client is necessary")
 	private String phoneNumber;
-	
+
 	@JsonIgnore
 	@ManyToOne(cascade = { CascadeType.PERSIST })
 	@JoinColumn(name = "conseiller_id")
@@ -42,7 +42,7 @@ public class Client {
 
 	public Client() {
 	}
-	
+
 	public Client(Long id, String name, String firstName, String adress, int zipCode, String city, String phoneNumber,
 			Consoler consoler) {
 		this.id = id;
@@ -54,7 +54,7 @@ public class Client {
 		this.phoneNumber = phoneNumber;
 		this.consoler = consoler;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
