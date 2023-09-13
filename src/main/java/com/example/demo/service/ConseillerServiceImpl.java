@@ -1,11 +1,13 @@
 package com.example.demo.service;
 
 import java.util.List;
-
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.dto.ConseillerDTO;
+import com.example.demo.mapper.ConseillerMapper;
 import com.example.demo.model.Conseiller;
 import com.example.demo.repository.ConseillerRepository;
 
@@ -13,6 +15,9 @@ import com.example.demo.repository.ConseillerRepository;
 public class ConseillerServiceImpl implements ConseillerService {
 
 	private final ConseillerRepository consillerRepository;
+
+	@Autowired
+	private ConseillerMapper mapper;
 
 	public ConseillerServiceImpl(ConseillerRepository consillerRepository) {
 		this.consillerRepository = consillerRepository;
@@ -29,13 +34,25 @@ public class ConseillerServiceImpl implements ConseillerService {
 	}
 
 	@Override
-	public Conseiller saveConseiller(Conseiller conseiller) {
-		return consillerRepository.save(conseiller);
+	public ConseillerDTO createConseiller(ConseillerDTO conseillerDTO) {
+		Conseiller conseiller = mapper.toConseiller(conseillerDTO);
+		Conseiller savedConseiller = consillerRepository.save(conseiller);
+		return mapper.ToDto(savedConseiller);
 	}
 
 	@Override
-	public Conseiller updateConseiller(Conseiller conseiller) {
-		return consillerRepository.save(conseiller);
+	public ConseillerDTO updateConseiller(Long id, ConseillerDTO conseillerDTO) {
+		Optional<Conseiller> existingConseillerOptional = consillerRepository.findById(id);
+		if (existingConseillerOptional.isEmpty()) {
+//            throw new ResourceNotFoundException("Conseiller not found with id: " + id);
+			throw new RuntimeException("Conseiller not found with id: " + id);
+		}
+		Conseiller existingConseiller = existingConseillerOptional.get();
+		existingConseiller.setName(conseillerDTO.getName());
+		existingConseiller.setFirstName(conseillerDTO.getFirstName());
+		Conseiller updatedConseiller = consillerRepository.save(existingConseiller);
+		return mapper.ToDto(updatedConseiller);
+
 	}
 
 	@Override

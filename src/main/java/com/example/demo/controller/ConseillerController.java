@@ -2,7 +2,9 @@ package com.example.demo.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.ClientDTO;
+import com.example.demo.dto.ConseillerDTO;
+import com.example.demo.mapper.ConseillerMapper;
 import com.example.demo.model.Conseiller;
 import com.example.demo.service.ConseillerService;
 
@@ -23,52 +28,57 @@ public class ConseillerController {
 
 	private final ConseillerService conseillerService;
 
+	@Autowired
+	private ConseillerMapper mapper;
+
 	public ConseillerController(ConseillerService conseillerService) {
 		this.conseillerService = conseillerService;
 	}
 
 	// Get all Conseillers
 	@GetMapping
-	public ResponseEntity<List<Conseiller>> getAllConseillers() {
-		List<Conseiller> conseillers = conseillerService.getAllConseillers();
-		return new ResponseEntity<>(conseillers, HttpStatus.OK);
+	public ResponseEntity<List<ConseillerDTO>> getAllConseillers() {
+		try {
+			return new ResponseEntity<>(conseillerService.getAllConseillers().stream().map(c -> mapper.ToDto(c))
+					.collect(Collectors.toList()), HttpStatus.OK);
+		} catch (RuntimeException e) {
+			return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	// Get a Conseiller by ID
 	@GetMapping("/{id}")
-	public ResponseEntity<Conseiller> getConseillerById(@PathVariable Long id) {
-		Optional<Conseiller> conseillerOptional = conseillerService.getConseillerById(id);
-
-		if (conseillerOptional.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	public ResponseEntity<ConseillerDTO> getConseillerById(@PathVariable Long id) {
+		try {
+			Optional<Conseiller> conseillerOptional = conseillerService.getConseillerById(id);
+			if (conseillerOptional.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+			Conseiller conseiller = conseillerOptional.get();
+			ConseillerDTO conseillerDTO = mapper.ToDto(conseiller);
+			return new ResponseEntity<>(conseillerDTO, HttpStatus.OK);
+		} catch (RuntimeException e) {
+			return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-
-		return new ResponseEntity<>(conseillerOptional.get(), HttpStatus.OK);
 	}
 
 	// Create a new Conseiller
 	@PostMapping
-	public ResponseEntity<Conseiller> createConseiller(@RequestBody Conseiller conseiller) {
-		Conseiller createdConsoler = conseillerService.saveConseiller(conseiller);
-		return new ResponseEntity<>(createdConsoler, HttpStatus.CREATED);
+	public ResponseEntity<ConseillerDTO> createConseiller(@RequestBody ConseillerDTO conseillerDTO) {
+		Conseiller conseiller = mapper.toConseiller(conseillerDTO);
+		ConseillerDTO createdConseiller = conseillerService.createConseiller(conseillerDTO);
+		return new ResponseEntity<>(createdConseiller, HttpStatus.CREATED);
 	}
 
 	// Update a Conseiller by ID
 	@PutMapping("/{id}")
-	public ResponseEntity<Conseiller> updateConseiller(@PathVariable Long id, @RequestBody Conseiller conseiller) {
-		Optional<Conseiller> existingConseillerOptional = conseillerService.getConseillerById(id);
-
-		if (existingConseillerOptional.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	public ResponseEntity<ConseillerDTO> updateConseiller(@PathVariable Long id, @RequestBody ConseillerDTO conseillerDTO) {
+		try {
+			ConseillerDTO updatedConseiller = conseillerService.updateConseiller(id ,conseillerDTO);
+			return new ResponseEntity<>(updatedConseiller, HttpStatus.OK);
+		} catch (RuntimeException e) {
+			return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-
-		Conseiller existingConseiller = existingConseillerOptional.get();
-		// Update existingConseiller properties with values from consoler
-		existingConseiller.setName(conseiller.getName());
-		existingConseiller.setFirstName(conseiller.getFirstName());
-
-		Conseiller updatedConseiller = conseillerService.updateConseiller(existingConseiller);
-		return new ResponseEntity<>(updatedConseiller, HttpStatus.OK);
 	}
 
 	// Delete a Conseiller by ID

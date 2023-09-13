@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.demo.dto.ConseillerDTO;
 import com.example.demo.model.Conseiller;
 
 public interface ConseillerService {
@@ -10,9 +11,9 @@ public interface ConseillerService {
 
 	Optional<Conseiller> getConseillerById(Long id);
 
-	Conseiller saveConseiller(Conseiller consoler);
+	ConseillerDTO createConseiller(ConseillerDTO conseillerDTO);
 
-	Conseiller updateConseiller(Conseiller conseiller);
+	ConseillerDTO updateConseiller(Long id ,ConseillerDTO conseillerDTO);
 
 	void deleteConseiller(Long id);
 
