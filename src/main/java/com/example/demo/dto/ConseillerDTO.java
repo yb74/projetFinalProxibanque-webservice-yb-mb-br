@@ -4,10 +4,12 @@ import java.util.Set;
 
 import com.example.demo.model.Client;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 public class ConseillerDTO {
-	@NotEmpty
+	@NotNull
 	private Long id;
 
 	@NotEmpty(message = "the name of the conseiller is necessary")
@@ -16,6 +18,7 @@ public class ConseillerDTO {
 	@NotEmpty(message = "the first name of the client is necessary")
 	private String firstName;
 
+	@Valid
 	private Set<Client> clients;
 
 	public ConseillerDTO(Long id, String name, String firstName, Set<Client> clients) {
