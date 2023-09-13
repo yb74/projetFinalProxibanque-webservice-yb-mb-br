@@ -4,10 +4,18 @@ import java.util.Set;
 
 import com.example.demo.model.Client;
 
+import jakarta.validation.constraints.NotEmpty;
+
 public class ConseillerDTO {
+	@NotEmpty
 	private Long id;
+
+	@NotEmpty(message = "the name of the conseiller is necessary")
 	private String name;
+
+	@NotEmpty(message = "the first name of the client is necessary")
 	private String firstName;
+
 	private Set<Client> clients;
 
 	public ConseillerDTO(Long id, String name, String firstName, Set<Client> clients) {

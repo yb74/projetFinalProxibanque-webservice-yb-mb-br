@@ -2,14 +2,31 @@ package com.example.demo.dto;
 
 import com.example.demo.model.Conseiller;
 
+import jakarta.validation.constraints.NotEmpty;
+
 public class ClientDTO {
+	@NotEmpty
 	private Long id;
+
+	@NotEmpty(message = "the name of the client is necessary")
 	private String name;
+
+	@NotEmpty(message = "the first name of the client is necessary")
 	private String firstName;
+
+	@NotEmpty(message = "the adress name of the client is necessary")
 	private String adress;
+
+	@NotEmpty(message = "the zip code of the client is necessary")
 	private int zipCode;
+
+	@NotEmpty(message = "the city of the client is necessary")
 	private String city;
+
+	@NotEmpty(message = "the phone number of the client is necessary")
 	private String phoneNumber;
+
+	@NotEmpty
 	private Conseiller conseiller;
 
 	public ClientDTO(Long id, String name, String firstName, String adress, int zipCode, String city,
