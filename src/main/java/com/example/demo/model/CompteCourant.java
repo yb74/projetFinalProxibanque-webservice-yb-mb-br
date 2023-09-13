@@ -8,7 +8,7 @@ import jakarta.persistence.OneToOne;
 
 @Entity
 public class CompteCourant extends Compte {
-    private int overdraft = 1000;
+    private double overdraft = 1000;
 
     @JsonIgnore
     @OneToOne(mappedBy = "compteCourant", cascade = CascadeType.PERSIST)
@@ -36,7 +36,7 @@ public class CompteCourant extends Compte {
     }
 
 
-    public CompteCourant(double balance, int overdraft, Carte carte, Client client) {
+    public CompteCourant(double balance, double overdraft, Carte carte, Client client) {
         super(balance);
         this.overdraft = overdraft;
         this.carte = carte;
@@ -52,11 +52,11 @@ public class CompteCourant extends Compte {
         this.carte.setCompte(this);
     }
 
-    public int getOverdraft() {
+    public double getOverdraft() {
         return overdraft;
     }
 
-    public void setOverdraft(int overdraft) {
+    public void setOverdraft(double overdraft) {
         this.overdraft = overdraft;
     }
 

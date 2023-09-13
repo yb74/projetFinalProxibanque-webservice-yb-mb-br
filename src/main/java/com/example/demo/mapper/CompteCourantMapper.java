@@ -12,6 +12,6 @@ public class CompteCourantMapper {
     }
 
     public CompteCourant toCompteCourant(CompteCourantDTO compteCourantDTO) {
-        return new CompteCourant(compteCourantDTO.getBalance(), compteCourantDTO.getDecouvert(), compteCourantDTO.getCarte(), compteCourantDTO.getClient());
+        return new CompteCourant(compteCourantDTO.getBalance(), compteCourantDTO.getOverdraft(), compteCourantDTO.getCarte(), compteCourantDTO.getClient());
     }
 }

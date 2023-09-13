@@ -6,7 +6,7 @@ import com.example.demo.model.Client;
 public class CompteCourantDTO {
     private Long id;
     private double balance;
-    private int decouvert = 1000;
+    private double overdraft = 1000;
     private Carte carte;
     private Client client;
 
@@ -17,10 +17,10 @@ public class CompteCourantDTO {
         this.balance = balance;
     }
 
-    public CompteCourantDTO(Long id, double balance, int decouvert, Carte carte, Client client) {
+    public CompteCourantDTO(Long id, double balance, double overdraft, Carte carte, Client client) {
         this.id = id;
         this.balance = balance;
-        this.decouvert = decouvert;
+        this.overdraft = overdraft;
         this.carte = carte;
         this.client = client;
     }
@@ -46,12 +46,12 @@ public class CompteCourantDTO {
         this.balance = balance;
     }
 
-    public int getDecouvert() {
-        return decouvert;
+    public double getOverdraft() {
+        return overdraft;
     }
 
-    public void setDecouvert(int decouvert) {
-        this.decouvert = decouvert;
+    public void setOverdraft(int overdraft) {
+        this.overdraft = overdraft;
     }
 
     public Carte getCarte() {
