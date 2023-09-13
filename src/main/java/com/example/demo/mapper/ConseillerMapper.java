@@ -1,5 +1,7 @@
 package com.example.demo.mapper;
 
+import org.springframework.stereotype.Component;
+
 import com.example.demo.dto.ConseillerDTO;
 import com.example.demo.model.Conseiller;
 import org.springframework.stereotype.Component;
