@@ -2,10 +2,13 @@ package com.example.demo.dto;
 
 import com.example.demo.model.Conseiller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 public class ClientDTO {
-	@NotEmpty
+    @NotNull(message = "the ID of the client is necessary")
 	private Long id;
 
 	@NotEmpty(message = "the name of the client is necessary")
@@ -17,7 +20,7 @@ public class ClientDTO {
 	@NotEmpty(message = "the adress name of the client is necessary")
 	private String adress;
 
-	@NotEmpty(message = "the zip code of the client is necessary")
+    @Min(value = 10000, message = "the zip code must be at least 5 digits")
 	private int zipCode;
 
 	@NotEmpty(message = "the city of the client is necessary")
@@ -26,7 +29,7 @@ public class ClientDTO {
 	@NotEmpty(message = "the phone number of the client is necessary")
 	private String phoneNumber;
 
-	@NotEmpty
+	@Valid
 	private Conseiller conseiller;
 
 	public ClientDTO(Long id, String name, String firstName, String adress, int zipCode, String city,
