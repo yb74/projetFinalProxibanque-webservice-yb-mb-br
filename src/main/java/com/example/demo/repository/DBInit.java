@@ -4,16 +4,19 @@ import com.example.demo.model.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
+import com.example.demo.model.Client;
+import com.example.demo.model.Conseiller;
+
 import jakarta.annotation.PostConstruct;
 
 import java.util.List;
 
 @Component
 public class DBInit {
-	private ConsolerRepository consolerRepository;
+	private ConseillerRepository consillerRepository;
 
-	public DBInit(ConsolerRepository consolerRepository) {
-		this.consolerRepository = consolerRepository;
+	public DBInit(ConseillerRepository consillerRepository) {
+		this.consillerRepository = consillerRepository;
 	}
 
 //	@PostConstruct
@@ -60,5 +63,4 @@ public class DBInit {
 //
 //		consolerRepository.saveAll(List.of(conseiller1, conseiller2));
 //	}
-
 }

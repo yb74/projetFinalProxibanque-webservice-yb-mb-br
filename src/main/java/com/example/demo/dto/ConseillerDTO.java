@@ -4,13 +4,13 @@ import java.util.Set;
 
 import com.example.demo.model.Client;
 
-public class ConsolerDTO {
+public class ConseillerDTO {
 	private Long id;
 	private String name;
 	private String firstName;
 	private Set<Client> clients;
 
-	public ConsolerDTO(Long id, String name, String firstName, Set<Client> clients) {
+	public ConseillerDTO(Long id, String name, String firstName, Set<Client> clients) {
 		this.id = id;
 		this.name = name;
 		this.firstName = firstName;

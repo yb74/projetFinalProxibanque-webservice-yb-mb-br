@@ -12,32 +12,32 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotEmpty;
 
 @Entity
-public class Consoler {
+public class Conseiller {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotEmpty(message = "the name of the consoler is necessary")
+	@NotEmpty(message = "the name of the conseiller is necessary")
 	private String name;
 
 	@NotEmpty(message = "the first name of the client is necessary")
 	private String firstName;
 
-	@OneToMany(mappedBy = "consoler", cascade = { CascadeType.PERSIST })
+	@OneToMany(mappedBy = "conseiller", cascade = { CascadeType.PERSIST })
 	private Set<Client> clients = new HashSet<>();
 
-	public Consoler() {
+	public Conseiller() {
 	}
 
-	public Consoler(Long id, String name, String firstName, Set<Client> clients) {
+	public Conseiller(Long id, String name, String firstName, Set<Client> clients) {
 		this.id = id;
 		this.name = name;
 		this.firstName = firstName;
 		this.clients = clients;
 	}
-	
-	public Consoler(String name, String firstName) {
+
+	public Conseiller(String name, String firstName) {
 		this.name = name;
 		this.firstName = firstName;
 	}
@@ -76,7 +76,7 @@ public class Consoler {
 
 	public void addClient(Client c) {
 		clients.add(c);
-		c.setConsoler(this);
+		c.setConseiller(this);
 	}
 
 }
