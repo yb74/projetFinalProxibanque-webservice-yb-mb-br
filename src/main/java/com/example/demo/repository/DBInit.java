@@ -13,10 +13,10 @@ import java.util.List;
 
 @Component
 public class DBInit {
-	private ConseillerRepository consillerRepository;
+	private ConseillerRepository conseillerRepository;
 
-	public DBInit(ConseillerRepository consillerRepository) {
-		this.consillerRepository = consillerRepository;
+	public DBInit(ConseillerRepository conseillerRepository) {
+		this.conseillerRepository = conseillerRepository;
 	}
 
 //	@PostConstruct
@@ -49,18 +49,18 @@ public class DBInit {
 //
 //
 //		// Create conseillers and associate them with the clients
-//		Consoler conseiller1 = new Consoler();
+//		Conseiller conseiller1 = new Conseiller();
 //		conseiller1.setName("Smith");
 //		conseiller1.setFirstName("John");
 //		conseiller1.addClient(client1);
 //		conseiller1.addClient(client2);
 //
-//		Consoler conseiller2 = new Consoler();
+//		Conseiller conseiller2 = new Conseiller();
 //		conseiller2.setName("Tom");
 //		conseiller2.setFirstName("Evans");
 //		conseiller2.addClient(client3);
 //		conseiller2.addClient(client4);
 //
-//		consolerRepository.saveAll(List.of(conseiller1, conseiller2));
+//		conseillerRepository.saveAll(List.of(conseiller1, conseiller2));
 //	}
 }

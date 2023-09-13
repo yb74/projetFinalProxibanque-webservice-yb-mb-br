@@ -4,17 +4,18 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.demo.dto.ConseillerDTO;
+import com.example.demo.exception.GeneralException;
 import com.example.demo.model.Conseiller;
 
 public interface ConseillerService {
 	List<Conseiller> getAllConseillers();
 
-	Optional<Conseiller> getConseillerById(Long id);
+	Optional<ConseillerDTO> getConseillerById(Long id) throws GeneralException;
 
 	ConseillerDTO createConseiller(ConseillerDTO conseillerDTO);
 
 	ConseillerDTO updateConseiller(Long id ,ConseillerDTO conseillerDTO);
 
-	void deleteConseiller(Long id);
+	void deleteConseiller(Long id) throws GeneralException;
 
 }
