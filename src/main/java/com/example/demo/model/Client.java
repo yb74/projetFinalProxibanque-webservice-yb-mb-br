@@ -2,13 +2,7 @@ package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 
 @Entity
@@ -17,23 +11,31 @@ public class Client {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotEmpty(message = "the name of the client is necessary")
+//	@NotEmpty(message = "the name of the client is necessary")
 	private String name;
 
-	@NotEmpty(message = "the first name of the client is necessary")
+//	@NotEmpty(message = "the first name of the client is necessary")
 	private String firstName;
 
-	@NotEmpty(message = "the adress name of the client is necessary")
+//	@NotEmpty(message = "the adress name of the client is necessary")
 	private String adress;
 
 //	@NotEmpty(message = "the zip code of the client is necessary")
 	private int zipCode;
 
-	@NotEmpty(message = "the city of the client is necessary")
+//	@NotEmpty(message = "the city of the client is necessary")
 	private String city;
 
-	@NotEmpty(message = "the phone number of the client is necessary")
+//	@NotEmpty(message = "the phone number of the client is necessary")
 	private String phoneNumber;
+
+	@OneToOne(cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
+	@JoinColumn(name = "compteCourant_id")
+	private CompteCourant compteCourant;
+
+	@OneToOne(cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
+	@JoinColumn(name = "compteEpargne_id")
+	private CompteEpargne compteEpargne;
 
 	@JsonIgnore
 	@ManyToOne(cascade = { CascadeType.PERSIST })
@@ -41,6 +43,21 @@ public class Client {
 	private Consoler consoler;
 
 	public Client() {
+	}
+
+	//on change le constructeur pour forcer l'association client compte courant ou epargne
+	// we enforce the association between Client and CompteCourant or CompteEpargne
+	public Client(String name,String firstName,CompteCourant compteCourant,CompteEpargne compteEpargne) {
+		this.name = name;
+		this.firstName = firstName;
+		this.compteCourant = compteCourant;
+		if (compteCourant != null) {
+			compteCourant.setClient(this);
+		}
+		this.compteEpargne = compteEpargne;
+		if (compteEpargne != null) {
+			compteEpargne.setClient(this);
+		}
 	}
 
 	public Client(Long id, String name, String firstName, String adress, int zipCode, String city, String phoneNumber,
@@ -118,6 +135,22 @@ public class Client {
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+
+	public CompteCourant getCompteCourant() {
+		return compteCourant;
+	}
+
+	public void setCompteCourant(CompteCourant compteCourant) {
+		this.compteCourant = compteCourant;
+	}
+
+	public CompteEpargne getCompteEpargne() {
+		return compteEpargne;
+	}
+
+	public void setCompteEpargne(CompteEpargne compteEpargne) {
+		this.compteEpargne = compteEpargne;
 	}
 
 	public Consoler getConsoler() {
