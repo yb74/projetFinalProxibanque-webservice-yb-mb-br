@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,77 +16,82 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.ClientDTO;
+import com.example.demo.mapper.ClientMapper;
 import com.example.demo.model.Client;
 import com.example.demo.service.ClientService;
-import com.example.demo.service.ConsolerService;
+import com.example.demo.service.ConseillerService;
 
 @RestController
 @RequestMapping("/clients")
 public class ClientController {
 
 	private final ClientService clientService;
-	private final ConsolerService consolerServer;
+	private final ConseillerService conseillerService;
 
-	public ClientController(ClientService clientService, ConsolerService consolerServer) {
+	@Autowired
+	private ClientMapper mapper;
+
+	public ClientController(ClientService clientService, ConseillerService conseillerService) {
 		this.clientService = clientService;
-		this.consolerServer = consolerServer;
+		this.conseillerService = conseillerService;
 	}
 
 	@GetMapping
-	ResponseEntity<List<Client>> getAllClients() {
+	ResponseEntity<List<ClientDTO>> getAllClients() {
 		try {
-			return new ResponseEntity<>(clientService.getAllClients(), HttpStatus.OK);
+			return new ResponseEntity<>(clientService.getAllClients().stream().map(c -> mapper.toDto(c)).toList(),
+					HttpStatus.OK);
 		} catch (RuntimeException e) {
 			return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@GetMapping("/{id}")
-	Optional<Client> getClientById(@PathVariable Long id) {
-		return clientService.getClientById(id);
+	ResponseEntity<ClientDTO> getClientById(@PathVariable Long id) {
+		try {
+			Optional<Client> clientOptional = clientService.getClientById(id);
+
+			if (clientOptional.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Return 404 Not Found if the client doesn't exist
+			}
+
+			ClientDTO clientDTO = mapper.toDto(clientOptional.get());
+			return new ResponseEntity<>(clientDTO, HttpStatus.OK);
+		} catch (RuntimeException e) {
+			return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@PostMapping
-	public ResponseEntity<Client> createClient(@RequestBody Client client, @RequestParam Long conseillerId) {
-		client.setConsoler(consolerServer.getConsolerById(conseillerId).get());
-		clientService.saveClient(client);
-		return new ResponseEntity<>(client, HttpStatus.CREATED);
+	public ResponseEntity<ClientDTO> createClient(@RequestBody ClientDTO clientDTO, @RequestParam Long conseillerId) {
+		clientDTO.setConseiller(conseillerService.getConseillerById(conseillerId).get());
+		ClientDTO savedClient = clientService.saveClient(clientDTO);
+		return new ResponseEntity<>(savedClient, HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{clientId}")
-	public ResponseEntity<Client> updateClient(@PathVariable Long clientId, @RequestBody Client client) {
-		clientService.saveClient(client);
-		Optional<Client> existingClientOptional = clientService.getClientById(clientId);
-		if (existingClientOptional.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Return 404 Not Found if the client doesn't exist
+	public ResponseEntity<ClientDTO> updateClient(@PathVariable Long clientId, @RequestBody ClientDTO clientDto) {
+		try {
+			ClientDTO updatedClient = clientService.updateClient(clientId, clientDto);
+			return new ResponseEntity<>(updatedClient, HttpStatus.OK);
+		} catch (RuntimeException e) {
+			return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-		Client existingClient = existingClientOptional.get();
-
-		// Update the properties of the existing client with the new values
-		existingClient.setName(client.getName());
-		existingClient.setFirstName(client.getFirstName());
-		existingClient.setAdress(client.getAdress());
-		existingClient.setZipCode(client.getZipCode());
-		existingClient.setCity(client.getCity());
-		existingClient.setPhoneNumber(client.getPhoneNumber());
-
-		Client updatedClient = clientService.updateClient(existingClient);
-
-	    return new ResponseEntity<>(updatedClient, HttpStatus.OK); // Return 200 OK with the updated client
 	}
-	
-	@DeleteMapping("/clientId")
-	public ResponseEntity<Client> removeClient(@PathVariable Long clientId) {
-		Optional<Client> clientOptional = clientService.getClientById(clientId);
 
-	    if (clientOptional.isEmpty()) {
-	        return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Return 404 Not Found if the client doesn't exist
-	    }
-
-	    // The client exists, so proceed with the deletion
-	    clientService.deleteClientById(clientId);
-
-	    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	@DeleteMapping("/{clientId}")
+	public ResponseEntity<String> removeClient(@PathVariable Long clientId) {
+		try {
+			Optional<Client> clientOptional = clientService.getClientById(clientId);
+			if (clientOptional.isEmpty()) {
+				return new ResponseEntity<>("Client with ID : " + clientId + " was not found!", HttpStatus.NOT_FOUND);
+			}
+			clientService.deleteClientById(clientId);
+			return new ResponseEntity<>("Client with ID : " + clientId + " deleted !", HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 }

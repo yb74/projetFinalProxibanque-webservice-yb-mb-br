@@ -5,6 +5,7 @@ import java.util.List;
 
 import java.util.Optional;
 
+import com.example.demo.dto.ClientDTO;
 import com.example.demo.model.Client;
 
 
@@ -13,9 +14,9 @@ public interface ClientService {
 
 	Optional<Client> getClientById(Long id);
 
-	Client saveClient(Client client);
+	ClientDTO saveClient(ClientDTO clientDto);
 
-	Client updateClient(Client client);
+	ClientDTO updateClient(Long id, ClientDTO clientDTO);
 
 	void deleteClientById(Long id);
 }

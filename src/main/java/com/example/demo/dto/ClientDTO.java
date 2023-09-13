@@ -1,27 +1,27 @@
 package com.example.demo.dto;
 
-import com.example.demo.model.Consoler;
+import com.example.demo.model.Conseiller;
 
 public class ClientDTO {
 	private Long id;
 	private String name;
-	private String firstname;
+	private String firstName;
 	private String adress;
 	private int zipCode;
 	private String city;
 	private String phoneNumber;
-	private Consoler consoler;
+	private Conseiller conseiller;
 
-	public ClientDTO(Long id, String name, String firstname, String adress, int zipCode, String city,
-			String phoneNumber, Consoler consoler) {
+	public ClientDTO(Long id, String name, String firstName, String adress, int zipCode, String city,
+			String phoneNumber, Conseiller conseiller) {
 		this.id = id;
 		this.name = name;
-		this.firstname = firstname;
+		this.firstName = firstName;
 		this.adress = adress;
 		this.zipCode = zipCode;
 		this.city = city;
 		this.phoneNumber = phoneNumber;
-		this.consoler = consoler;
+		this.conseiller = conseiller;
 	}
 
 	public Long getId() {
@@ -40,12 +40,12 @@ public class ClientDTO {
 		this.name = name;
 	}
 
-	public String getFirstname() {
-		return firstname;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
+	public void setFirstName(String firstname) {
+		this.firstName = firstname;
 	}
 
 	public String getAdress() {
@@ -80,12 +80,12 @@ public class ClientDTO {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public Consoler getConsoler() {
-		return consoler;
+	public Conseiller getConseiller() {
+		return conseiller;
 	}
 
-	public void setConsoler(Consoler consoler) {
-		this.consoler = consoler;
+	public void setConseiller(Conseiller conseiller) {
+		this.conseiller = conseiller;
 	}
 
 }

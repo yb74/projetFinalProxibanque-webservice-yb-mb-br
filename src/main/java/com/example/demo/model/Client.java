@@ -37,14 +37,14 @@ public class Client {
 
 	@JsonIgnore
 	@ManyToOne(cascade = { CascadeType.PERSIST })
-	@JoinColumn(name = "consoler_id")
-	private Consoler consoler;
+	@JoinColumn(name = "conseiller_id")
+	private Conseiller conseiller;
 
 	public Client() {
 	}
 
 	public Client(Long id, String name, String firstName, String adress, int zipCode, String city, String phoneNumber,
-			Consoler consoler) {
+			Conseiller conseiller) {
 		this.id = id;
 		this.name = name;
 		this.firstName = firstName;
@@ -52,7 +52,7 @@ public class Client {
 		this.zipCode = zipCode;
 		this.city = city;
 		this.phoneNumber = phoneNumber;
-		this.consoler = consoler;
+		this.conseiller = conseiller;
 	}
 
 	public Client(String name, String firstName, String adress, int zipCode, String city, String phoneNumber) {
@@ -120,18 +120,18 @@ public class Client {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public Consoler getConsoler() {
-		return consoler;
+	public Conseiller getConseiller() {
+		return conseiller;
 	}
 
-	public void setConsoler(Consoler consoler) {
-		this.consoler = consoler;
+	public void setConseiller(Conseiller conseiller) {
+		this.conseiller = conseiller;
 	}
 
 	@Override
 	public String toString() {
 		return "Client [id=" + id + ", name=" + name + ", firstName=" + firstName + ", adress=" + adress + ", zipCode="
-				+ zipCode + ", city=" + city + ", phoneNumber=" + phoneNumber + ", consoler=" + consoler + "]";
+				+ zipCode + ", city=" + city + ", phoneNumber=" + phoneNumber + ", conseiller=" + conseiller + "]";
 	}
 
 }
