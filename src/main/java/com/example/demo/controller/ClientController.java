@@ -22,19 +22,19 @@ import com.example.demo.model.Client;
 import com.example.demo.service.ClientService;
 import com.example.demo.service.ConseillerService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/clients")
 public class ClientController {
 
 	private final ClientService clientService;
-	private final ConseillerService conseillerService;
 
 	@Autowired
 	private ClientMapper mapper;
 
-	public ClientController(ClientService clientService, ConseillerService conseillerService) {
+	public ClientController(ClientService clientService) {
 		this.clientService = clientService;
-		this.conseillerService = conseillerService;
 	}
 
 	@GetMapping
@@ -55,7 +55,6 @@ public class ClientController {
 			if (clientOptional.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Return 404 Not Found if the client doesn't exist
 			}
-
 			ClientDTO clientDTO = mapper.toDto(clientOptional.get());
 			return new ResponseEntity<>(clientDTO, HttpStatus.OK);
 		} catch (RuntimeException e) {
@@ -63,11 +62,18 @@ public class ClientController {
 		}
 	}
 
+//	@PostMapping
+//	public ResponseEntity<ClientDTO> createClient(@RequestBody ClientDTO clientDTO, @RequestParam Long conseillerId) {
+//		clientDTO.setConseiller(conseillerService.getConseillerById(conseillerId).get());
+//		ClientDTO savedClient = clientService.createClient(clientDTO);
+//		return new ResponseEntity<>(savedClient, HttpStatus.CREATED);
+//	}
+	
 	@PostMapping
-	public ResponseEntity<ClientDTO> createClient(@RequestBody ClientDTO clientDTO, @RequestParam Long conseillerId) {
-		clientDTO.setConseiller(conseillerService.getConseillerById(conseillerId).get());
-		ClientDTO savedClient = clientService.saveClient(clientDTO);
-		return new ResponseEntity<>(savedClient, HttpStatus.CREATED);
+	public ResponseEntity<ClientDTO> createClientWithConseiller(@Valid @RequestBody ClientDTO client,
+			@RequestParam Long conseillerId) {
+		ClientDTO createdClient = clientService.createClientWithConseiller(client, conseillerId);
+		return new ResponseEntity<>(createdClient, HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{clientId}")

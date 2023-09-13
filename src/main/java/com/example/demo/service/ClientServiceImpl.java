@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,18 +10,22 @@ import org.springframework.stereotype.Service;
 import com.example.demo.dto.ClientDTO;
 import com.example.demo.mapper.ClientMapper;
 import com.example.demo.model.Client;
+import com.example.demo.model.Conseiller;
 import com.example.demo.repository.ClientRepository;
+import com.example.demo.repository.ConseillerRepository;
 
 @Service
 public class ClientServiceImpl implements ClientService {
 
 	private final ClientRepository clientRepository;
+	private final ConseillerRepository conseillerRepository ;
 
 	@Autowired
 	private ClientMapper mapper;
 
-	public ClientServiceImpl(ClientRepository clientRepository) {
+	public ClientServiceImpl(ClientRepository clientRepository, ConseillerRepository conseillerRepository) {
 		this.clientRepository = clientRepository;
+		this.conseillerRepository = conseillerRepository;
 	}
 
 	@Override
@@ -34,7 +39,7 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	@Override
-	public ClientDTO saveClient(ClientDTO clientDTO) {
+	public ClientDTO createClient(ClientDTO clientDTO) {
 		Client client = mapper.toClient(clientDTO);
 		Client savedClient = clientRepository.save(client);
 		return mapper.toDto(savedClient);
@@ -68,6 +73,19 @@ public class ClientServiceImpl implements ClientService {
 			throw new RuntimeException("Client not found with id: " + id);
 		}
 		clientRepository.deleteById(id);
+	}
+
+	@Override
+	public ClientDTO createClientWithConseiller(ClientDTO clientDto, Long conseillerId) {
+	    Optional<Conseiller> existingconseillerOptional = conseillerRepository.findById(conseillerId);
+	    if (existingconseillerOptional.isEmpty()) {
+			throw new RuntimeException("Client not found with id: " + conseillerId);
+		}
+	    Conseiller conseiller = existingconseillerOptional.get();
+	    Client client = mapper.toClient(clientDto);
+	    client.setConseiller(conseiller);
+	    client = clientRepository.save(client);
+	    return mapper.toDto(client);
 	}
 
 }
