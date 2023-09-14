@@ -6,11 +6,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.example.demo.exception.GeneralException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import com.example.demo.dto.ConseillerDTO;
 import com.example.demo.exception.GeneralException;
@@ -56,19 +59,8 @@ public class ConseillerController {
 
 	// Get a Conseiller by ID
 	@GetMapping("/{id}")
-	public ResponseEntity<ConseillerDTO> getConseillerById(@PathVariable Long id) {
-		try {
-			Optional<Conseiller> conseillerOptional = conseillerService.getConseillerById(id);
-			if (conseillerOptional.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			}
-			Conseiller conseiller = conseillerOptional.get();
-			ConseillerDTO conseillerDTO = mapper.ToDto(conseiller);
-			return new ResponseEntity<>(conseillerDTO, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}
-
+	Optional<ConseillerDTO> getConseillerById(@PathVariable Long id) throws GeneralException {
+		return conseillerService.getConseillerById(id);
 	}
 
 	@PostMapping
@@ -90,14 +82,9 @@ public class ConseillerController {
 
 	// Delete a Conseiller by ID
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteConseiller(@PathVariable Long id) throws GeneralException {
-		Optional<Conseiller> ConseillerOptional = conseillerService.getConseillerById(id);
-		if (ConseillerOptional.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-
+	ResponseEntity<String> deleteConseiller(@PathVariable Long id) throws GeneralException {
 		conseillerService.deleteConseiller(id);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>("Conseiller with ID : " + id + " deleted !", HttpStatus.OK);
 	}
 
 	@PutMapping("/virement/comptes/courants")

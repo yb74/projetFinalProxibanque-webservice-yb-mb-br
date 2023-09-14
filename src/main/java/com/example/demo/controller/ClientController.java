@@ -5,11 +5,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.example.demo.dto.ConseillerDTO;
+import com.example.demo.exception.GeneralException;
+import com.example.demo.service.ConseillerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,10 +40,14 @@ public class ClientController {
 
 	private final ClientService clientService;
 
+//	@Autowired
+	private final ConseillerService conseillerService;
+
 	@Autowired
 	private ClientMapper mapper;
 
-	public ClientController(ClientService clientService) {
+	public ClientController(ClientService clientService, ConseillerService conseillerService) {
+		this.conseillerService = conseillerService;
 		this.clientService = clientService;
 	}
 
@@ -67,6 +75,14 @@ public class ClientController {
 //		ClientDTO savedClient = clientService.createClient(clientDTO);
 //		return new ResponseEntity<>(savedClient, HttpStatus.CREATED);
 //	}
+
+	@GetMapping("/{conseillerId}/clients")
+	public ResponseEntity<List<ClientDTO>> getClientsForConseiller(@PathVariable Long conseillerId) throws GeneralException {
+		Optional<ConseillerDTO> conseiller = conseillerService.getConseillerById(conseillerId);
+
+		List<ClientDTO> clients = clientService.getClientsByConseiller(conseiller);
+		return new ResponseEntity<>(clients, HttpStatus.OK);
+	}
 
 	@PostMapping
 	public ResponseEntity<ClientDTO> createClientWithConseiller(@Valid @RequestBody ClientDTO client,
@@ -113,5 +129,4 @@ public class ClientController {
 
 		return errors;
 	}
-
 }

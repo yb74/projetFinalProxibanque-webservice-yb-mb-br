@@ -2,14 +2,15 @@ package com.example.demo.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
+import com.example.demo.exception.GeneralException;
+import com.example.demo.model.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.ConseillerDTO;
-import com.example.demo.exception.GeneralException;
 import com.example.demo.mapper.ConseillerMapper;
-import com.example.demo.model.Client;
 import com.example.demo.model.CompteCourant;
 import com.example.demo.model.Conseiller;
 import com.example.demo.repository.ClientRepository;
@@ -17,38 +18,45 @@ import com.example.demo.repository.ConseillerRepository;
 
 @Service
 public class ConseillerServiceImpl implements ConseillerService {
-
-	private final ConseillerRepository consillerRepository;
+	private final ConseillerRepository conseillerRepository;
 	private final ClientRepository clientRepository;
 
 	@Autowired
 	private ConseillerMapper mapper;
 
-	public ConseillerServiceImpl(ConseillerRepository consillerRepository, ClientRepository clientRepository) {
-		this.consillerRepository = consillerRepository;
+	public ConseillerServiceImpl(ConseillerRepository conseillerRepository, ClientRepository clientRepository) {
+		this.conseillerRepository = conseillerRepository;
 		this.clientRepository = clientRepository;
 	}
 
 	@Override
 	public List<Conseiller> getAllConseillers() {
-		return (List<Conseiller>) consillerRepository.findAll();
+		return (List<Conseiller>) conseillerRepository.findAll();
 	}
 
 	@Override
-	public Optional<Conseiller> getConseillerById(Long id) {
-		return consillerRepository.findById(id);
+	public Optional<ConseillerDTO> getConseillerById(Long id) throws GeneralException {
+		Optional<Conseiller> optionalConseiller = conseillerRepository.findById(id);
+
+		if (optionalConseiller.isPresent()) {
+			ConseillerDTO conseillerDto = mapper.ToDto(optionalConseiller.get());
+			return Optional.of(conseillerDto);
+		} else {
+			throw new GeneralException("Conseiller not found with ID: " + id);
+		}
 	}
 
 	@Override
 	public ConseillerDTO createConseiller(ConseillerDTO conseillerDTO) {
 		Conseiller conseiller = mapper.toConseiller(conseillerDTO);
-		Conseiller savedConseiller = consillerRepository.save(conseiller);
+		Conseiller savedConseiller = conseillerRepository.save(conseiller);
 		return mapper.ToDto(savedConseiller);
 	}
 
 	@Override
 	public ConseillerDTO updateConseiller(Long id, ConseillerDTO conseillerDTO) throws GeneralException {
-		Optional<Conseiller> existingConseillerOptional = consillerRepository.findById(id);
+		Optional<Conseiller> existingConseillerOptional = conseillerRepository.findById(id);
+
 		if (existingConseillerOptional.isEmpty()) {
 //            throw new ResourceNotFoundException("Conseiller not found with id: " + id);
 			throw new GeneralException("Conseiller not found with id: " + id);
@@ -56,14 +64,25 @@ public class ConseillerServiceImpl implements ConseillerService {
 		Conseiller existingConseiller = existingConseillerOptional.get();
 		existingConseiller.setName(conseillerDTO.getName());
 		existingConseiller.setFirstName(conseillerDTO.getFirstName());
-		Conseiller updatedConseiller = consillerRepository.save(existingConseiller);
+		Conseiller updatedConseiller = conseillerRepository.save(existingConseiller);
 		return mapper.ToDto(updatedConseiller);
 
 	}
 
 	@Override
-	public void deleteConseiller(Long id) {
-		consillerRepository.deleteById(id);
+	public void deleteConseiller(Long conseillerId) throws GeneralException {
+		Conseiller conseiller = conseillerRepository.findById(conseillerId)
+				.orElseThrow(() -> new GeneralException("Conseiller not found with ID: " + conseillerId));
+
+		Set<Client> clients = conseiller.getClients();
+
+		// Disassociate each Client from the Conseiller
+		for (Client client : clients) {
+			client.setConseiller(null);
+		}
+
+		// Delete the Conseiller
+		conseillerRepository.delete(conseiller);
 	}
 
 	@Override
