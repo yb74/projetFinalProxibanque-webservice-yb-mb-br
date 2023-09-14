@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import com.example.demo.dto.ConseillerDTO;
 import com.example.demo.exception.GeneralException;
+
+import com.example.demo.model.Client;
 import com.example.demo.model.Conseiller;
 
 public interface ConseillerService {
@@ -14,8 +16,14 @@ public interface ConseillerService {
 
 	ConseillerDTO createConseiller(ConseillerDTO conseillerDTO);
 
-	ConseillerDTO updateConseiller(Long id ,ConseillerDTO conseillerDTO);
+	ConseillerDTO updateConseiller(Long id, ConseillerDTO conseillerDTO) throws GeneralException;
 
 	void deleteConseiller(Long id) throws GeneralException;
+
+	String virementComptesCourants(double montant, Client clientEmetteur, Client clientRecepteur) throws GeneralException;
+
+	String virementCourantEpargne(double montant, Client client) throws GeneralException;
+
+	String virementEpargneCourant(double montant, Client client) throws GeneralException;
 
 }
