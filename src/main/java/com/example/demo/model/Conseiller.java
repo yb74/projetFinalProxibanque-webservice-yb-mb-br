@@ -9,7 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotEmpty;
 
 @Entity
 public class Conseiller {
@@ -18,10 +17,7 @@ public class Conseiller {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotEmpty(message = "the name of the conseiller is necessary")
 	private String name;
-
-	@NotEmpty(message = "the first name of the client is necessary")
 	private String firstName;
 
 	@OneToMany(mappedBy = "conseiller", cascade = { CascadeType.PERSIST })

@@ -3,7 +3,11 @@ package com.example.demo.service;
 import java.util.List;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import com.example.demo.dto.ConseillerDTO;
+import com.example.demo.exception.GeneralException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,16 +80,50 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	@Override
-	public ClientDTO createClientWithConseiller(ClientDTO clientDto, Long conseillerId) {
-	    Optional<Conseiller> existingconseillerOptional = conseillerRepository.findById(conseillerId);
-	    if (existingconseillerOptional.isEmpty()) {
-			throw new RuntimeException("Client not found with id: " + conseillerId);
+	public List<ClientDTO> getClientsByConseiller(Optional<ConseillerDTO> conseillerDTO) throws GeneralException {
+		Long conseillerId = conseillerDTO.orElseThrow(() -> new GeneralException("Conseiller not provided"))
+				.getId();
+
+		Conseiller conseiller = conseillerRepository.findById(conseillerId)
+				.orElseThrow(() -> new GeneralException("Conseiller not found with ID: " + conseillerId));
+
+		Set<Client> clients = conseiller.getClients();
+		if (clients.isEmpty()) {
+			throw new GeneralException("No clients found for Conseiller with ID: " + conseillerId);
 		}
-	    Conseiller conseiller = existingconseillerOptional.get();
-	    Client client = mapper.toClient(clientDto);
-	    client.setConseiller(conseiller);
-	    client = clientRepository.save(client);
-	    return mapper.toDto(client);
+
+		// Using the mapping methods to convert Client entities to ClientDTO objects
+		List<ClientDTO> clientDTOs = clients.stream()
+				.map(client -> mapper.toDto(client))
+				.collect(Collectors.toList());
+
+		return clientDTOs;
+	}
+
+	@Override
+	public ClientDTO createClientWithConseiller(ClientDTO clientDto, Long conseillerId) throws GeneralException {
+		Conseiller conseiller = conseillerRepository.findById(conseillerId)
+				.orElseThrow(() -> new GeneralException("Conseiller with ID " + conseillerId + " not found"));
+
+		// Check if the Conseiller already has 10 clients
+		if (conseiller.getClients().size() > 9) {
+			// Find an alternative Conseiller with fewer clients
+			List<Conseiller> alternativeConseillers = conseillerRepository.findByClientsSizeLessThan(10);
+
+			// If no alternative Conseiller found, throw a custom exception
+			if (alternativeConseillers.isEmpty()) {
+				throw new GeneralException("No free alternative Conseiller found with fewer clients.");
+			}
+
+			// Choose the first alternative Conseiller
+			conseiller = alternativeConseillers.get(0);
+		}
+
+		Client client = mapper.toClient(clientDto);
+		client.setConseiller(conseiller);
+		client = clientRepository.save(client);
+
+		return mapper.toDto(client);
 	}
 
 }

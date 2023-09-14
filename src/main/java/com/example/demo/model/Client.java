@@ -2,8 +2,14 @@ package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Client {
@@ -11,22 +17,16 @@ public class Client {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-//	@NotEmpty(message = "the name of the client is necessary")
 	private String name;
 
-//	@NotEmpty(message = "the first name of the client is necessary")
 	private String firstName;
 
-//	@NotEmpty(message = "the adress name of the client is necessary")
 	private String adress;
 
-//	@NotEmpty(message = "the zip code of the client is necessary")
 	private int zipCode;
 
-//	@NotEmpty(message = "the city of the client is necessary")
 	private String city;
 
-//	@NotEmpty(message = "the phone number of the client is necessary")
 	private String phoneNumber;
 
 	@OneToOne(cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
@@ -45,9 +45,10 @@ public class Client {
 	public Client() {
 	}
 
-	//on change le constructeur pour forcer l'association client compte courant ou epargne
+	// on change le constructeur pour forcer l'association client compte courant ou
+	// epargne
 	// we enforce the association between Client and CompteCourant or CompteEpargne
-	public Client(String name,String firstName,CompteCourant compteCourant,CompteEpargne compteEpargne) {
+	public Client(String name, String firstName, CompteCourant compteCourant, CompteEpargne compteEpargne) {
 		this.name = name;
 		this.firstName = firstName;
 		this.compteCourant = compteCourant;
@@ -137,7 +138,6 @@ public class Client {
 		this.phoneNumber = phoneNumber;
 	}
 
-
 	public CompteCourant getCompteCourant() {
 		return compteCourant;
 	}
@@ -153,7 +153,7 @@ public class Client {
 	public void setCompteEpargne(CompteEpargne compteEpargne) {
 		this.compteEpargne = compteEpargne;
 	}
-	
+
 	public Conseiller getConseiller() {
 		return conseiller;
 	}
