@@ -1,57 +1,43 @@
-package com.example.demo.model;
+package com.example.demo.dto;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.example.demo.model.Client;
+import com.example.demo.model.Transaction.TypeDeVirement;
 
-@Entity
-public class Transaction {
-	public enum TypeDeVirement {
-		COURANT_COURANT, COURANT_EPARGNE, EPARGNE_COURANT;
-	}
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+public class TransactionDTO {
+
+	@NotNull
 	private Long id;
 
+	@NotEmpty(message = "the amount of the transaction is necessary")
 	private double amount;
+
+	@NotEmpty(message = "the date of the transaction is necessary")
 	private LocalDateTime timestamp = LocalDateTime.now();
 
-	@ManyToOne
-	@JoinColumn(name = "client_emetteur_id")
+	@Valid
 	private Client clientEmetteur;
 
-	@ManyToOne
-	@JoinColumn(name = "client_recepteur_id")
+	@Valid
 	private Client clientRecepteur;
 
-	@Enumerated(EnumType.STRING)
+	@NotEmpty(message = "the type of the transaction is necessary")
 	private TypeDeVirement typeDeVirement;
 
+	@NotEmpty(message = "the ID of the compte is necessary")
 	private Long compteEmitteurId;
 
+	@NotEmpty(message = "the ID of the compte is necessary")
 	private Long compteRecepteurId;
 
-	public Transaction() {
-	}
-
-	public Transaction(double amount, Client clientEmetteur, Client clientRecepteur, TypeDeVirement typeDeVirement) {
-		this.amount = amount;
-		this.clientEmetteur = clientEmetteur;
-		this.clientRecepteur = clientRecepteur;
-		this.timestamp = LocalDateTime.now();
-		this.typeDeVirement = typeDeVirement;
-	}
-
-	public Transaction(Long id, double amount, LocalDateTime timestamp, Client clientEmetteur, Client clientRecepteur,
-			TypeDeVirement typeDeVirement, Long compteEmitteurId, Long compteRecepteurId) {
+	public TransactionDTO(Long id, double amount, LocalDateTime timestamp, Client clientEmetteur,
+			Client clientRecepteur, TypeDeVirement typeDeVirement, Long compteEmitteurId,
+			Long compteRecepteurId) {
 		this.id = id;
 		this.amount = amount;
 		this.timestamp = timestamp;

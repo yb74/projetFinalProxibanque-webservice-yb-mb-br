@@ -73,21 +73,19 @@ public class DBInit {
 		Transaction transaction1 = new Transaction();
 		transaction1.setAmount(100.0);
 		transaction1.setClientEmetteur(client1);
+		transaction1.setCompteEmitteurId(2L);
 		transaction1.setClientRecepteur(client2);
+		transaction1.setCompteEmitteurId(1L);
 		transaction1.setTypeDeVirement(Transaction.TypeDeVirement.COURANT_COURANT);
 
 		Transaction transaction2 = new Transaction();
-		transaction2.setAmount(50.0);
-		transaction2.setClientEmetteur(client3);
-		transaction2.setClientRecepteur(client1);
-		transaction2.setTypeDeVirement(Transaction.TypeDeVirement.COURANT_COURANT);
-		
-		Transaction transaction3 = new Transaction();
 		transaction2.setAmount(500.0);
 		transaction2.setClientEmetteur(client1);
+		transaction2.setCompteEmitteurId(1L);
 		transaction2.setClientRecepteur(client1);
+		transaction2.setCompteRecepteurId(1L);
 		transaction2.setTypeDeVirement(Transaction.TypeDeVirement.COURANT_EPARGNE);
-
+		
 		// Save conseillers
 		conseillerRepository.saveAll(List.of(conseiller1, conseiller2));
 		// Save clients

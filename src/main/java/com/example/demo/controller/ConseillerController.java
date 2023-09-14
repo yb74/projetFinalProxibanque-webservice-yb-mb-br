@@ -6,13 +6,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.example.demo.exception.GeneralException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,18 +19,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 
 import com.example.demo.dto.ConseillerDTO;
 import com.example.demo.exception.GeneralException;
 import com.example.demo.mapper.ConseillerMapper;
-import com.example.demo.model.Client;
 import com.example.demo.model.Conseiller;
-import com.example.demo.model.Transaction;
-import com.example.demo.service.ClientService;
 import com.example.demo.service.ConseillerService;
 
 @RestController
@@ -40,14 +33,12 @@ import com.example.demo.service.ConseillerService;
 public class ConseillerController {
 
 	private final ConseillerService conseillerService;
-	private final ClientService clientService;
 
 	@Autowired
 	private ConseillerMapper mapper;
 
-	public ConseillerController(ConseillerService conseillerService, ClientService clientService) {
+	public ConseillerController(ConseillerService conseillerService) {
 		this.conseillerService = conseillerService;
-		this.clientService = clientService;
 	}
 
 	// Get all Conseillers
@@ -86,46 +77,6 @@ public class ConseillerController {
 	ResponseEntity<String> deleteConseiller(@PathVariable Long id) throws GeneralException {
 		conseillerService.deleteConseiller(id);
 		return new ResponseEntity<>("Conseiller with ID : " + id + " deleted !", HttpStatus.OK);
-	}
-
-	@PutMapping("/virement/comptes/courants")
-	ResponseEntity<String> virementCompteCourantToCompteCourant(@RequestParam Long idEmetteur,
-			@RequestParam Long idRecepteur, @RequestParam double montant) throws GeneralException {
-		Optional<Client> optionalClientEmetteur = clientService.getClientById(idEmetteur);
-		Optional<Client> optionalClientRecepteur = clientService.getClientById(idRecepteur);
-		Client clientEmetteur = optionalClientEmetteur.get();
-		Client clientRecepteur = optionalClientRecepteur.get();
-		return new ResponseEntity<>(conseillerService.virementComptesCourants(montant, clientEmetteur, clientRecepteur),
-				HttpStatus.OK);
-	}
-
-	@PutMapping("/virement")
-	public ResponseEntity<String> virement(@RequestParam Long idEmetteur, @RequestParam double montant,
-			@RequestParam String typeVirement) throws GeneralException {
-		try {
-			switch (typeVirement) {
-			case "compteCourantVersCompteEpargne": {
-				Optional<Client> client = clientService.getClientById(idEmetteur);
-				if (client.isEmpty()) {
-					throw new GeneralException("Client non trouvé");
-				}
-				return ResponseEntity.ok(conseillerService.virementCourantEpargne(montant, client.get()));
-			}
-			case "compteEpargneVersCompteCourant": {
-				Optional<Client> client = clientService.getClientById(idEmetteur);
-				if (client.isEmpty()) {
-					throw new GeneralException("Client non trouvé");
-				}
-				return ResponseEntity.ok(conseillerService.virementEpargneCourant(montant, client.get()));
-			}
-			default:
-				throw new IllegalArgumentException("Type de virement non pris en charge: " + typeVirement);
-			}
-		} catch (GeneralException e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		} catch (Exception e) {
-			return new ResponseEntity<>("Une erreur est survenue", HttpStatus.INTERNAL_SERVER_ERROR);
-		}
 	}
 
 	// Exception handler for GeneralException
