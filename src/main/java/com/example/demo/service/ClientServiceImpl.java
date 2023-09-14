@@ -106,7 +106,7 @@ public class ClientServiceImpl implements ClientService {
 				.orElseThrow(() -> new GeneralException("Conseiller with ID " + conseillerId + " not found"));
 
 		// Check if the Conseiller already has 10 clients
-		if (conseiller.getClients().size() > 10) {
+		if (conseiller.getClients().size() > 9) {
 			// Find an alternative Conseiller with fewer clients
 			List<Conseiller> alternativeConseillers = conseillerRepository.findByClientsSizeLessThan(10);
 
