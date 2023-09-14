@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -105,8 +106,8 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 	
     @Override
-    public Transaction getTransactionById(Long id) {
-        return transactionRepository.findById(id).orElse(null);
+    public Optional<Transaction> getTransactionById(Long id) {
+        return transactionRepository.findById(id);
     }
 	
     @Override

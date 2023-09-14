@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.TransactionDTO;
 import com.example.demo.exception.GeneralException;
+import com.example.demo.mapper.TransactionMapper;
 import com.example.demo.model.Client;
 import com.example.demo.model.Transaction;
 import com.example.demo.service.ClientService;
@@ -27,6 +30,9 @@ public class TransactionController {
 	private final ConseillerService conseillerService;
 	private final ClientService clientService;
 
+	@Autowired
+	private TransactionMapper mapper;
+
 	public TransactionController(TransactionService transactionService, ConseillerService conseillerService,
 			ClientService clientService) {
 		this.transactionService = transactionService;
@@ -35,19 +41,20 @@ public class TransactionController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Transaction>> getAllTransactions() {
-		List<Transaction> transactions = transactionService.getAllTransactions();
-		return ResponseEntity.ok(transactions);
+	public ResponseEntity<List<TransactionDTO>> getAllTransactions() throws GeneralException {
+		return new ResponseEntity<>(transactionService.getAllTransactions().stream().map(t -> mapper.ToDto(t)).toList(),
+				HttpStatus.OK);
 	}
 
 	@GetMapping("/{transactionId}")
-	public ResponseEntity<Transaction> getTransaction(@PathVariable Long transactionId) {
-		Transaction transaction = transactionService.getTransactionById(transactionId);
-		if (transaction != null) {
-			return ResponseEntity.ok(transaction);
-		} else {
-			return ResponseEntity.notFound().build();
+	public ResponseEntity<TransactionDTO> getTransaction(@PathVariable Long transactionId) throws GeneralException  {
+		Optional<Transaction> Optransaction = transactionService.getTransactionById(transactionId);
+		
+		if (Optransaction.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Return 404 Not Found if the client doesn't exist
 		}
+		TransactionDTO transactionDTO = mapper.ToDto(Optransaction.get());
+		return ResponseEntity.ok(transactionDTO);
 	}
 
 	@PutMapping("/virement/comptes/courants")
