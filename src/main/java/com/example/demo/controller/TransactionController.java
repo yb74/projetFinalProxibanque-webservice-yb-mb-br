@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,9 +46,9 @@ public class TransactionController {
 	}
 
 	@GetMapping("/{transactionId}")
-	public ResponseEntity<TransactionDTO> getTransaction(@PathVariable Long transactionId) throws GeneralException  {
+	public ResponseEntity<TransactionDTO> getTransaction(@PathVariable Long transactionId) throws GeneralException {
 		Optional<Transaction> Optransaction = transactionService.getTransactionById(transactionId);
-		
+
 		if (Optransaction.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Return 404 Not Found if the client doesn't exist
 		}
@@ -57,7 +56,7 @@ public class TransactionController {
 		return ResponseEntity.ok(transactionDTO);
 	}
 
-	@PutMapping("/virement/comptes/courants")
+	@PostMapping("ComptesCourants")
 	ResponseEntity<String> virementCompteCourantToCompteCourant(@RequestParam Long idEmetteur,
 			@RequestParam Long idRecepteur, @RequestParam double montant) throws GeneralException {
 		Optional<Client> optionalClientEmetteur = clientService.getClientById(idEmetteur);
@@ -68,7 +67,7 @@ public class TransactionController {
 				HttpStatus.OK);
 	}
 
-	@PostMapping
+	@PostMapping("CourantEpargne")
 	public ResponseEntity<String> virement(@RequestParam Long idEmetteur, @RequestParam double montant,
 			@RequestParam String typeVirement) throws GeneralException {
 		try {
