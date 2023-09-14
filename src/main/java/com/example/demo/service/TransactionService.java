@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.demo.exception.GeneralException;
 import com.example.demo.model.Client;
@@ -17,7 +18,7 @@ public interface TransactionService {
 
 	Transaction createTransaction(double amount, Client clientEmetteur, Client clientRecepteur, TypeDeVirement typeDeVirement);
 
-	Transaction getTransactionById(Long id);
+	Optional<Transaction> getTransactionById(Long id);
 
 	List<Transaction> getAllTransactions();
 }
