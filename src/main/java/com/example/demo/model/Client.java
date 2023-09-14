@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -9,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -41,6 +44,14 @@ public class Client {
 	@ManyToOne(cascade = { CascadeType.PERSIST })
 	@JoinColumn(name = "conseiller_id")
 	private Conseiller conseiller;
+	
+	@JsonIgnore
+    @OneToMany(mappedBy = "clientEmetteur")
+    private List<Transaction> transactionsEmetteur;
+
+	@JsonIgnore
+    @OneToMany(mappedBy = "clientRecepteur")
+    private List<Transaction> transactionsRecepteur;
 
 	public Client() {
 	}
@@ -161,6 +172,22 @@ public class Client {
 	public void setConseiller(Conseiller conseiller) {
 		this.conseiller = conseiller;
 	}
+	
+    public List<Transaction> getTransactionsEmetteur() {
+        return transactionsEmetteur;
+    }
+
+    public void setTransactionsEmetteur(List<Transaction> transactionsEmetteur) {
+        this.transactionsEmetteur = transactionsEmetteur;
+    }
+    
+    public List<Transaction> getTransactionsRecepteur() {
+        return transactionsRecepteur;
+    }
+
+    public void setTransactionsRecepteur(List<Transaction> transactionsRecepteur) {
+        this.transactionsRecepteur = transactionsRecepteur;
+    }
 
 	@Override
 	public String toString() {
