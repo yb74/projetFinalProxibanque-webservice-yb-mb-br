@@ -31,6 +31,7 @@ import com.example.demo.exception.GeneralException;
 import com.example.demo.mapper.ConseillerMapper;
 import com.example.demo.model.Client;
 import com.example.demo.model.Conseiller;
+import com.example.demo.model.Transaction;
 import com.example.demo.service.ClientService;
 import com.example.demo.service.ConseillerService;
 

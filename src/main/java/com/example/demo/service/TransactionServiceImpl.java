@@ -1,93 +1,26 @@
 package com.example.demo.service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.dto.ConseillerDTO;
 import com.example.demo.exception.GeneralException;
-import com.example.demo.mapper.ConseillerMapper;
 import com.example.demo.model.Client;
 import com.example.demo.model.CompteCourant;
-import com.example.demo.model.Conseiller;
 import com.example.demo.model.Transaction;
+import com.example.demo.model.Transaction.TypeDeVirement;
 import com.example.demo.repository.ClientRepository;
-import com.example.demo.repository.ConseillerRepository;
 import com.example.demo.repository.TransactionRepository;
 
 @Service
-public class ConseillerServiceImpl implements ConseillerService {
-	private final ConseillerRepository conseillerRepository;
+public class TransactionServiceImpl implements TransactionService {
+
 	private final ClientRepository clientRepository;
 	private final TransactionRepository transactionRepository;
 
-	@Autowired
-	private ConseillerMapper mapper;
-
-	public ConseillerServiceImpl(ConseillerRepository conseillerRepository, ClientRepository clientRepository,
-			TransactionRepository transactionRepository) {
-		this.conseillerRepository = conseillerRepository;
+	public TransactionServiceImpl(ClientRepository clientRepository, TransactionRepository transactionRepository) {
 		this.clientRepository = clientRepository;
 		this.transactionRepository = transactionRepository;
-	}
-
-	@Override
-	public List<Conseiller> getAllConseillers() {
-		return (List<Conseiller>) conseillerRepository.findAll();
-	}
-
-	@Override
-	public Optional<ConseillerDTO> getConseillerById(Long id) throws GeneralException {
-		Optional<Conseiller> optionalConseiller = conseillerRepository.findById(id);
-
-		if (optionalConseiller.isPresent()) {
-			ConseillerDTO conseillerDto = mapper.ToDto(optionalConseiller.get());
-			return Optional.of(conseillerDto);
-		} else {
-			throw new GeneralException("Conseiller not found with ID: " + id);
-		}
-	}
-
-	@Override
-	public ConseillerDTO createConseiller(ConseillerDTO conseillerDTO) {
-		Conseiller conseiller = mapper.toConseiller(conseillerDTO);
-		Conseiller savedConseiller = conseillerRepository.save(conseiller);
-		return mapper.ToDto(savedConseiller);
-	}
-
-	@Override
-	public ConseillerDTO updateConseiller(Long id, ConseillerDTO conseillerDTO) throws GeneralException {
-		Optional<Conseiller> existingConseillerOptional = conseillerRepository.findById(id);
-
-		if (existingConseillerOptional.isEmpty()) {
-//            throw new ResourceNotFoundException("Conseiller not found with id: " + id);
-			throw new GeneralException("Conseiller not found with id: " + id);
-		}
-		Conseiller existingConseiller = existingConseillerOptional.get();
-		existingConseiller.setName(conseillerDTO.getName());
-		existingConseiller.setFirstName(conseillerDTO.getFirstName());
-		Conseiller updatedConseiller = conseillerRepository.save(existingConseiller);
-		return mapper.ToDto(updatedConseiller);
-
-	}
-
-	@Override
-	public void deleteConseiller(Long conseillerId) throws GeneralException {
-		Conseiller conseiller = conseillerRepository.findById(conseillerId)
-				.orElseThrow(() -> new GeneralException("Conseiller not found with ID: " + conseillerId));
-
-		Set<Client> clients = conseiller.getClients();
-
-		// Disassociate each Client from the Conseiller
-		for (Client client : clients) {
-			client.setConseiller(null);
-		}
-
-		// Delete the Conseiller
-		conseillerRepository.delete(conseiller);
 	}
 
 	@Override
@@ -106,11 +39,6 @@ public class ConseillerServiceImpl implements ConseillerService {
 				messageReponse = "Virement effectué avec succès !";
 				clientRepository.save(clientEmetteur);
 				clientRepository.save(clientRecepteur);
-				Transaction transaction = new Transaction(montant, clientEmetteur, clientRecepteur,
-						Transaction.TypeDeVirement.COURANT_COURANT);
-				transaction.setCompteEmitteurId(clientEmetteur.getCompteCourant().getId());
-				transaction.setCompteRecepteurId(clientRecepteur.getCompteCourant().getId());
-				transactionRepository.save(transaction);
 				return messageReponse;
 			} else {
 				messageReponse = "solde insuffisant";
@@ -135,11 +63,6 @@ public class ConseillerServiceImpl implements ConseillerService {
 				nouveauSoldeRecepteur = client.getCompteEpargne().getBalance() + montant;
 				client.getCompteEpargne().setBalance(nouveauSoldeRecepteur);
 				clientRepository.save(client);
-				Transaction transaction = new Transaction(montant, client, client,
-						Transaction.TypeDeVirement.COURANT_EPARGNE);
-				transaction.setCompteEmitteurId(client.getCompteCourant().getId());
-				transaction.setCompteRecepteurId(client.getCompteEpargne().getId());
-				transactionRepository.save(transaction);
 				messageReponse = "Virement effectué avec succès !";
 				return messageReponse;
 			} else {
@@ -164,11 +87,6 @@ public class ConseillerServiceImpl implements ConseillerService {
 				double nouveauSoldeCourant = client.getCompteCourant().getBalance() + montant;
 				client.getCompteCourant().setBalance(nouveauSoldeCourant);
 				clientRepository.save(client);
-				Transaction transaction = new Transaction(montant, client, client,
-						Transaction.TypeDeVirement.EPARGNE_COURANT);
-				transaction.setCompteEmitteurId(client.getCompteEpargne().getId());
-				transaction.setCompteRecepteurId(client.getCompteCourant().getId());
-				transactionRepository.save(transaction);
 				messageReponse = "Virement effectué avec succès !";
 				return messageReponse;
 			} else {
@@ -179,7 +97,22 @@ public class ConseillerServiceImpl implements ConseillerService {
 			messageReponse = "Le montant du virement doit être positif";
 			throw new GeneralException(messageReponse);
 		}
-
 	}
+
+	@Override
+	public List<Transaction> getAllTransactions() {
+		return transactionRepository.findAll();
+	}
+	
+    @Override
+    public Transaction getTransactionById(Long id) {
+        return transactionRepository.findById(id).orElse(null);
+    }
+	
+    @Override
+    public Transaction createTransaction(double amount, Client clientEmetteur, Client clientRecepteur, TypeDeVirement typeDeVirement) {
+        Transaction transaction = new Transaction(amount, clientEmetteur, clientRecepteur, typeDeVirement);
+        return transactionRepository.save(transaction);
+    }
 
 }
