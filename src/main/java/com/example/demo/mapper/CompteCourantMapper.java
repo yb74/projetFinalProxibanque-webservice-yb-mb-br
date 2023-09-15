@@ -20,11 +20,11 @@ public class CompteCourantMapper {
 	}
 
 	public CompteCourantDTO toDto(CompteCourant c) {
-		return new CompteCourantDTO(c.getId(), c.getBalance(), c.getOverdraft(), c.getCarte().getId(), c.getClient().getId());
+		return new CompteCourantDTO(c.getId(), c.getAccountNumber(), c.getBalance(), c.getOverdraft(), c.getCarte().getId(), c.getClient().getId());
 	}
 
 	public CompteCourant toCompteCourant(CompteCourantDTO compteCourantDTO) {
-		return new CompteCourant(compteCourantDTO.getBalance(), compteCourantDTO.getOverdraft(),
+		return new CompteCourant(compteCourantDTO.getBalance(), compteCourantDTO.getAccountNumber(), compteCourantDTO.getOverdraft(),
 				carteService.getCarteById(compteCourantDTO.getCarteId()).get(), clientService.getClientById(compteCourantDTO.getClientId()).get());
 	}
 }
