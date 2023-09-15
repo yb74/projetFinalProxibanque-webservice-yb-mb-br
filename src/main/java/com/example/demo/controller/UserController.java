@@ -64,10 +64,7 @@ public class UserController {
 
 	@PostMapping
 	public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
-		UserModel User = mapper.toUserModel(userDTO);
-		UserModel savedUser = userService.createUser(User);
-		UserDTO savedUserDTO = mapper.toDTO(savedUser);
-		return new ResponseEntity<>(savedUserDTO, HttpStatus.OK);
+		return new ResponseEntity<>(userService.createUser(userDTO), HttpStatus.OK);
 	}
 
 	// Exception handler for GeneralException

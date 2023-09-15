@@ -14,7 +14,7 @@ public interface UserService {
 
 	Optional<UserModel> getUserById(Long id);
 
-	UserModel createUser(UserModel user);
+	UserDTO createUser(UserDTO userDTO);
 	
 	Boolean login(String username, String password) throws GeneralException;
 
