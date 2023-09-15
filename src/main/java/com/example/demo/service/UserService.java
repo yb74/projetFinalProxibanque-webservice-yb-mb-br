@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.demo.dto.ConseillerDTO;
+import com.example.demo.dto.UserDTO;
 import com.example.demo.exception.GeneralException;
 import com.example.demo.model.UserModel;
 

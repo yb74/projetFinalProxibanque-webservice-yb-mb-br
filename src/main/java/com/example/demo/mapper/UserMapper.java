@@ -1,8 +1,11 @@
 package com.example.demo.mapper;
 
+import org.springframework.stereotype.Component;
+
 import com.example.demo.dto.UserDTO;
 import com.example.demo.model.UserModel;
 
+@Component
 public class UserMapper {
 
 	public UserDTO toDTO(UserModel user) {
@@ -10,7 +13,7 @@ public class UserMapper {
 
 	}
 
-	public UserModel toDTO(UserDTO userDTO) {
+	public UserModel toUserModel(UserDTO userDTO) {
 		return new UserModel(userDTO.getId(), userDTO.getUsername(), userDTO.getPassword(), userDTO.getRole(),
 				userDTO.getConseiller());
 
