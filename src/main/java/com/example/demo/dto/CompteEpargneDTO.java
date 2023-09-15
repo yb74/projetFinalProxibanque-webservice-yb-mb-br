@@ -4,6 +4,7 @@ import com.example.demo.model.Client;
 
 public class CompteEpargneDTO {
     private Long id;
+    private String accountNumber;
     private double balance;
     private double remuneration = 0.3;
     private Client client;
@@ -11,8 +12,9 @@ public class CompteEpargneDTO {
     public CompteEpargneDTO() {
     }
 
-    public CompteEpargneDTO(Long id, double balance, double remuneration, Client client) {
+    public CompteEpargneDTO(Long id, String accountNumber, double balance, double remuneration, Client client) {
         this.id = id;
+        this.accountNumber = accountNumber;
         this.balance = balance;
         this. remuneration = remuneration;
         this.client = client;
@@ -28,6 +30,14 @@ public class CompteEpargneDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public double getBalance() {

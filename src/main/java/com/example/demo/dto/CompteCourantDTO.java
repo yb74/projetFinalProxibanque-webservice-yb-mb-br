@@ -2,6 +2,7 @@ package com.example.demo.dto;
 
 public class CompteCourantDTO {
 	private Long id;
+	private String accountNumber;
 	private double balance;
 	private double overdraft = 1000;
 	private Long carteId;
@@ -22,8 +23,9 @@ public class CompteCourantDTO {
 //		this.client = client;
 //	}
 
-	public CompteCourantDTO(Long id, double balance, double overdraft, Long carteId, Long clientId) {
+	public CompteCourantDTO(Long id, String accountNumber, double balance, double overdraft, Long carteId, Long clientId) {
 		this.id = id;
+		this.accountNumber = accountNumber;
 		this.balance = balance;
 		this.overdraft = overdraft;
 		this.carteId = carteId;
@@ -95,4 +97,11 @@ public class CompteCourantDTO {
 		this.overdraft = overdraft;
 	}
 
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
 }

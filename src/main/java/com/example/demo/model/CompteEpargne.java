@@ -18,8 +18,8 @@ public class CompteEpargne extends Compte {
         this.client.setCompteEpargne(this);
     }
 
-    public CompteEpargne(double balance, double remuneration, Client client) {
-        super(balance);
+    public CompteEpargne(String accountNumber, double balance, double remuneration, Client client) {
+        super(accountNumber, balance);
         this.remuneration = remuneration;
         this.client = client;
     }
