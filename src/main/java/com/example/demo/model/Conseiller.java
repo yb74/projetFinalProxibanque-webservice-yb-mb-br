@@ -28,14 +28,16 @@ public class Conseiller {
 	@JoinColumn(name = "user_id")
 	private UserModel user;
 
+	private Set<Long> clientsIds = new HashSet<>();
+
 	public Conseiller() {
 	}
 
-	public Conseiller(Long id, String name, String firstName, Set<Client> clients) {
+	public Conseiller(Long id, String name, String firstName, Set<Long> clientsIds) {
 		this.id = id;
 		this.name = name;
 		this.firstName = firstName;
-		this.clients = clients;
+		this.clientsIds = clientsIds;
 	}
 
 	public Conseiller(Long id, String name, String firstName, Set<Client> clients, UserModel user) {
@@ -44,11 +46,6 @@ public class Conseiller {
 		this.firstName = firstName;
 		this.clients = clients;
 		this.user = user;
-	}
-
-	public Conseiller(String name, String firstName) {
-		this.name = name;
-		this.firstName = firstName;
 	}
 
 	public Long getId() {
@@ -89,6 +86,14 @@ public class Conseiller {
 
 	public void setUser(UserModel user) {
 		this.user = user;
+	}
+
+	public Set<Long> getClientsIds() {
+		return clientsIds;
+	}
+
+	public void setClientsIds(Set<Long> clientsIds) {
+		this.clientsIds = clientsIds;
 	}
 
 	public void addClient(Client c) {
