@@ -1,17 +1,30 @@
 package com.example.demo.mapper;
 
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+
 import com.example.demo.dto.CompteCourantDTO;
 import com.example.demo.model.CompteCourant;
-import org.springframework.stereotype.Component;
+import com.example.demo.service.CarteService;
+import com.example.demo.service.ClientService;
 
 @Component
 public class CompteCourantMapper {
 
-    public CompteCourantDTO toDto(CompteCourant c) {
-        return new CompteCourantDTO(c.getId(), c.getBalance(), c.getOverdraft(), c.getCarte(), c.getClient());
-    }
+	private final ClientService clientService;
+	private CarteService carteService;
 
-    public CompteCourant toCompteCourant(CompteCourantDTO compteCourantDTO) {
-        return new CompteCourant(compteCourantDTO.getBalance(), compteCourantDTO.getOverdraft(), compteCourantDTO.getCarte(), compteCourantDTO.getClient());
-    }
+	public CompteCourantMapper(@Lazy ClientService clientService, CarteService carteService) {
+		this.clientService = clientService;
+		this.carteService = carteService;
+	}
+
+	public CompteCourantDTO toDto(CompteCourant c) {
+		return new CompteCourantDTO(c.getId(), c.getBalance(), c.getOverdraft(), c.getCarte().getId(), c.getClient().getId());
+	}
+
+	public CompteCourant toCompteCourant(CompteCourantDTO compteCourantDTO) {
+		return new CompteCourant(compteCourantDTO.getBalance(), compteCourantDTO.getOverdraft(),
+				carteService.getCarteById(compteCourantDTO.getCarteId()).get(), clientService.getClientById(compteCourantDTO.getClientId()).get());
+	}
 }

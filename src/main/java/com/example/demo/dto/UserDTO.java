@@ -1,6 +1,5 @@
 package com.example.demo.dto;
 
-import com.example.demo.model.Conseiller;
 import com.example.demo.model.Role;
 
 public class UserDTO {
@@ -8,14 +7,14 @@ public class UserDTO {
 	private String username;
 	private String password;
 	private Role role;
-	private Conseiller conseiller;
+	private Long conseillerId;
 
-	public UserDTO(Long id, String username, String password, Role role, Conseiller conseiller) {
+	public UserDTO(Long id, String username, String password, Role role, Long conseillerId) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.role = role;
-		this.conseiller = conseiller;
+		this.conseillerId = conseillerId;
 	}
 
 	public Long getId() {
@@ -50,12 +49,12 @@ public class UserDTO {
 		this.role = role;
 	}
 
-	public Conseiller getConseiller() {
-		return conseiller;
+	public Long getConseillerId() {
+		return conseillerId;
 	}
 
-	public void setConseiller(Conseiller conseiller) {
-		this.conseiller = conseiller;
+	public void setConseillerId(Long conseillerId) {
+		this.conseillerId = conseillerId;
 	}
 
 }

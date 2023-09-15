@@ -7,11 +7,14 @@ import com.example.demo.model.Carte;
 import com.example.demo.model.CompteCourant;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CompteCourantService {
     List<CompteCourantDTO> getAllCompte();
 
     CompteCourantDTO getCompteById(Long compteId) throws GeneralException;
+    
+	Optional<CompteCourant> getCompteCourantById(Long compteId);
 
     CompteCourantDTO createCompte(CompteCourantDTO compte);
 

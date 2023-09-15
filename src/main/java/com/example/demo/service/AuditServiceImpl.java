@@ -1,19 +1,19 @@
 package com.example.demo.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.example.demo.dto.CompteCourantDTO;
 import com.example.demo.dto.CompteEpargneDTO;
 import com.example.demo.mapper.CompteCourantMapper;
 import com.example.demo.mapper.CompteEpargneMapper;
-import com.example.demo.model.Compte;
 import com.example.demo.model.CompteCourant;
 import com.example.demo.model.CompteEpargne;
 import com.example.demo.repository.CompteCourantRepository;
 import com.example.demo.repository.CompteEpargneRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class AuditServiceImpl implements AuditService {

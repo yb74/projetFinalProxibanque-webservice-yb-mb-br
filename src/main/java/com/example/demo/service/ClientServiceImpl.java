@@ -1,17 +1,16 @@
 package com.example.demo.service;
 
 import java.util.List;
-
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.example.demo.dto.ConseillerDTO;
-import com.example.demo.exception.GeneralException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.ClientDTO;
+import com.example.demo.dto.ConseillerDTO;
+import com.example.demo.exception.GeneralException;
 import com.example.demo.mapper.ClientMapper;
 import com.example.demo.model.Client;
 import com.example.demo.model.Conseiller;
@@ -22,7 +21,7 @@ import com.example.demo.repository.ConseillerRepository;
 public class ClientServiceImpl implements ClientService {
 
 	private final ClientRepository clientRepository;
-	private final ConseillerRepository conseillerRepository ;
+	private final ConseillerRepository conseillerRepository;
 
 	@Autowired
 	private ClientMapper mapper;
@@ -43,7 +42,7 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	@Override
-	public ClientDTO createClient(ClientDTO clientDTO) {
+	public ClientDTO createClient(ClientDTO clientDTO) throws GeneralException {
 		Client client = mapper.toClient(clientDTO);
 		Client savedClient = clientRepository.save(client);
 		return mapper.toDto(savedClient);
@@ -81,8 +80,7 @@ public class ClientServiceImpl implements ClientService {
 
 	@Override
 	public List<ClientDTO> getClientsByConseiller(Optional<ConseillerDTO> conseillerDTO) throws GeneralException {
-		Long conseillerId = conseillerDTO.orElseThrow(() -> new GeneralException("Conseiller not provided"))
-				.getId();
+		Long conseillerId = conseillerDTO.orElseThrow(() -> new GeneralException("Conseiller not provided")).getId();
 
 		Conseiller conseiller = conseillerRepository.findById(conseillerId)
 				.orElseThrow(() -> new GeneralException("Conseiller not found with ID: " + conseillerId));
@@ -93,9 +91,7 @@ public class ClientServiceImpl implements ClientService {
 		}
 
 		// Using the mapping methods to convert Client entities to ClientDTO objects
-		List<ClientDTO> clientDTOs = clients.stream()
-				.map(client -> mapper.toDto(client))
-				.collect(Collectors.toList());
+		List<ClientDTO> clientDTOs = clients.stream().map(client -> mapper.toDto(client)).collect(Collectors.toList());
 
 		return clientDTOs;
 	}
@@ -124,6 +120,11 @@ public class ClientServiceImpl implements ClientService {
 		client = clientRepository.save(client);
 
 		return mapper.toDto(client);
+	}
+
+	@Override
+	public Set<Long> getClientsIdsByConseillerId(Long conseillerId) {
+		return clientRepository.findIdsByConseillerId(conseillerId);
 	}
 
 }

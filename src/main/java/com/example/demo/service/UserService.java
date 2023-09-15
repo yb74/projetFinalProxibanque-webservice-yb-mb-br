@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.demo.dto.ConseillerDTO;
+import com.example.demo.dto.UserDTO;
 import com.example.demo.exception.GeneralException;
 import com.example.demo.model.UserModel;
 
@@ -13,7 +14,7 @@ public interface UserService {
 
 	Optional<UserModel> getUserById(Long id);
 
-	UserModel createUser(UserModel user);
+	UserDTO createUser(UserDTO userDTO) throws GeneralException;
 	
 	Boolean login(String username, String password) throws GeneralException;
 
