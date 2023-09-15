@@ -38,16 +38,16 @@ public class DBInit {
 	public void initializeDatabase() {
 		// Create and associate accounts
 		CompteCourant compteC1 = new CompteCourant(30000);
+		CompteCourant compteC2 = new CompteCourant(1000);
+		CompteCourant compteC3 = new CompteCourant(200);
 		CompteEpargne compteE1 = new CompteEpargne(60000);
-		CompteCourant compteC3 = new CompteCourant(1000);
-		CompteCourant compteC4 = new CompteCourant(200);
 		CompteEpargne compteE2 = new CompteEpargne(2000);
 		CompteEpargne compteE3 = new CompteEpargne(4000);
 
 		// Create cards
 		Carte carte1 = new Carte(Carte.TypeDeCarte.VISA_ELECTRON, compteC1);
-		Carte carte2 = new Carte(Carte.TypeDeCarte.VISA_PREMIER, compteC3);
-		Carte carte3 = new Carte(Carte.TypeDeCarte.VISA_PREMIER, compteC4);
+		Carte carte2 = new Carte(Carte.TypeDeCarte.VISA_PREMIER, compteC2);
+		Carte carte3 = new Carte(Carte.TypeDeCarte.VISA_PREMIER, compteC3);
 
 //        // Save accounts and cards
 //        compteCourantRepository.saveAll(List.of(compteC1, compteC3, compteC4));
@@ -56,9 +56,8 @@ public class DBInit {
 
 		// Create clients and associate them with accounts
 		Client client1 = new Client("Dupont", "Alice", compteC1, compteE1);
-		Client client2 = new Client("Gautier", "Martin", compteC3, null);
-		Client client3 = new Client("Durant", "Bruno", compteC4, compteE2);
-		Client client4 = new Client("Rivière", "Sophie", null, compteE3);
+		Client client2 = new Client("Gautier", "Martin", compteC2, compteE2);
+		Client client3 = new Client("Durant", "Bruno", compteC3, compteE3);
 
 		// Create conseillers and associate them with clients
 		Conseiller conseiller1 = new Conseiller();
@@ -75,7 +74,6 @@ public class DBInit {
 		UserModel user2 = new UserModel("akira2", "1234", Role.GEREANT, conseiller2);
 		conseiller2.setUser(user2);
 		conseiller2.addClient(client3);
-		conseiller2.addClient(client4);
 
 		userRepository.save(user1);
 		userRepository.save(user2);
@@ -100,7 +98,7 @@ public class DBInit {
 		// Save conseillers
 		conseillerRepository.saveAll(List.of(conseiller1, conseiller2));
 		// Save clients
-		clientRepository.saveAll(List.of(client1, client2, client3, client4));
+		clientRepository.saveAll(List.of(client1, client2, client3));
 
 		// Save transactions
 		transactionRepository.saveAll(List.of(transaction1, transaction2));

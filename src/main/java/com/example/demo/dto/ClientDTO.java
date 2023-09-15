@@ -1,8 +1,5 @@
 package com.example.demo.dto;
 
-import com.example.demo.model.Conseiller;
-
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -19,7 +16,7 @@ public class ClientDTO {
 	@NotEmpty(message = "the adress name of the client is necessary")
 	private String adress;
 
-    @Min(value = 10000, message = "the zip code must be at least 5 digits")
+	@Min(value = 10000, message = "the zip code must be at least 5 digits")
 	private int zipCode;
 
 	@NotEmpty(message = "the city of the client is necessary")
@@ -28,11 +25,29 @@ public class ClientDTO {
 	@NotEmpty(message = "the phone number of the client is necessary")
 	private String phoneNumber;
 
-	@Valid
-	private Conseiller conseiller;
+//	@Valid
+//	private Conseiller conseiller;
+
+	@NotNull
+	private Long conseillerId;
+
+	private Long compteCourantId;
+	private Long compteEpargneId;
+
+//	public ClientDTO(Long id, String name, String firstName, String adress, int zipCode, String city,
+//			String phoneNumber, Conseiller conseiller) {
+//		this.id = id;
+//		this.name = name;
+//		this.firstName = firstName;
+//		this.adress = adress;
+//		this.zipCode = zipCode;
+//		this.city = city;
+//		this.phoneNumber = phoneNumber;
+//		this.conseiller = conseiller;
+//	}
 
 	public ClientDTO(Long id, String name, String firstName, String adress, int zipCode, String city,
-			String phoneNumber, Conseiller conseiller) {
+			String phoneNumber, Long conseillerId) {
 		this.id = id;
 		this.name = name;
 		this.firstName = firstName;
@@ -40,7 +55,21 @@ public class ClientDTO {
 		this.zipCode = zipCode;
 		this.city = city;
 		this.phoneNumber = phoneNumber;
-		this.conseiller = conseiller;
+		this.conseillerId = conseillerId;
+	}
+
+	public ClientDTO(Long id, String name, String firstName, String adress, int zipCode, String city,
+			String phoneNumber, Long conseillerId, Long compteCourantId, Long compteEpargneId) {
+		this.id = id;
+		this.name = name;
+		this.firstName = firstName;
+		this.adress = adress;
+		this.zipCode = zipCode;
+		this.city = city;
+		this.phoneNumber = phoneNumber;
+		this.conseillerId = conseillerId;
+		this.compteCourantId = compteCourantId;
+		this.compteEpargneId = compteEpargneId;
 	}
 
 	public Long getId() {
@@ -99,12 +128,36 @@ public class ClientDTO {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public Conseiller getConseiller() {
-		return conseiller;
+//	public Conseiller getConseiller() {
+//		return conseiller;
+//	}
+//
+//	public void setConseiller(Conseiller conseiller) {
+//		this.conseiller = conseiller;
+//	}
+
+	public Long getConseillerId() {
+		return conseillerId;
 	}
 
-	public void setConseiller(Conseiller conseiller) {
-		this.conseiller = conseiller;
+	public void setConseillerId(Long conseillerId) {
+		this.conseillerId = conseillerId;
+	}
+
+	public Long getCompteCourantId() {
+		return compteCourantId;
+	}
+
+	public void setCompteCourantId(Long compteCourantId) {
+		this.compteCourantId = compteCourantId;
+	}
+
+	public Long getCompteEpargneId() {
+		return compteEpargneId;
+	}
+
+	public void setCompteEpargneId(Long compteEpargneId) {
+		this.compteEpargneId = compteEpargneId;
 	}
 
 }

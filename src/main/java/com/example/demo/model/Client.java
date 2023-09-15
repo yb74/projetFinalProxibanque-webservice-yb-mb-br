@@ -44,14 +44,14 @@ public class Client {
 	@ManyToOne(cascade = { CascadeType.PERSIST })
 	@JoinColumn(name = "conseiller_id")
 	private Conseiller conseiller;
-	
-	@JsonIgnore
-    @OneToMany(mappedBy = "clientEmetteur")
-    private List<Transaction> transactionsEmetteur;
 
 	@JsonIgnore
-    @OneToMany(mappedBy = "clientRecepteur")
-    private List<Transaction> transactionsRecepteur;
+	@OneToMany(mappedBy = "clientEmetteur")
+	private List<Transaction> transactionsEmetteur;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "clientRecepteur")
+	private List<Transaction> transactionsRecepteur;
 
 	public Client() {
 	}
@@ -81,6 +81,20 @@ public class Client {
 		this.zipCode = zipCode;
 		this.city = city;
 		this.phoneNumber = phoneNumber;
+		this.conseiller = conseiller;
+	}
+
+	public Client(Long id, String name, String firstName, String adress, int zipCode, String city, String phoneNumber,
+			Conseiller conseiller, CompteCourant compteCourant, CompteEpargne compteEpargne) {
+		this.id = id;
+		this.name = name;
+		this.firstName = firstName;
+		this.adress = adress;
+		this.zipCode = zipCode;
+		this.city = city;
+		this.phoneNumber = phoneNumber;
+		this.compteCourant = compteCourant;
+		this.compteEpargne = compteEpargne;
 		this.conseiller = conseiller;
 	}
 
@@ -172,22 +186,22 @@ public class Client {
 	public void setConseiller(Conseiller conseiller) {
 		this.conseiller = conseiller;
 	}
-	
-    public List<Transaction> getTransactionsEmetteur() {
-        return transactionsEmetteur;
-    }
 
-    public void setTransactionsEmetteur(List<Transaction> transactionsEmetteur) {
-        this.transactionsEmetteur = transactionsEmetteur;
-    }
-    
-    public List<Transaction> getTransactionsRecepteur() {
-        return transactionsRecepteur;
-    }
+	public List<Transaction> getTransactionsEmetteur() {
+		return transactionsEmetteur;
+	}
 
-    public void setTransactionsRecepteur(List<Transaction> transactionsRecepteur) {
-        this.transactionsRecepteur = transactionsRecepteur;
-    }
+	public void setTransactionsEmetteur(List<Transaction> transactionsEmetteur) {
+		this.transactionsEmetteur = transactionsEmetteur;
+	}
+
+	public List<Transaction> getTransactionsRecepteur() {
+		return transactionsRecepteur;
+	}
+
+	public void setTransactionsRecepteur(List<Transaction> transactionsRecepteur) {
+		this.transactionsRecepteur = transactionsRecepteur;
+	}
 
 	@Override
 	public String toString() {
