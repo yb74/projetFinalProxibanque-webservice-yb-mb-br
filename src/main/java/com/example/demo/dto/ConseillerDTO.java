@@ -2,9 +2,6 @@ package com.example.demo.dto;
 
 import java.util.Set;
 
-import com.example.demo.model.Client;
-
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
@@ -18,14 +15,13 @@ public class ConseillerDTO {
 	@NotEmpty(message = "the first name of the client is necessary")
 	private String firstName;
 
-	@Valid
-	private Set<Client> clients;
+	private Set<Long> clientsIds;
 
-	public ConseillerDTO(Long id, String name, String firstName, Set<Client> clients) {
+	public ConseillerDTO(Long id, String name, String firstName, Set<Long> clientsIds) {
 		this.id = id;
 		this.name = name;
 		this.firstName = firstName;
-		this.clients = clients;
+		this.clientsIds = clientsIds;
 	}
 
 	public Long getId() {
@@ -52,12 +48,12 @@ public class ConseillerDTO {
 		this.firstName = firstName;
 	}
 
-	public Set<Client> getClients() {
-		return clients;
+	public Set<Long> getClientsIds() {
+		return clientsIds;
 	}
 
-	public void setClients(Set<Client> clients) {
-		this.clients = clients;
+	public void setClientsIds(Set<Long> clientsIds) {
+		this.clientsIds = clientsIds;
 	}
 
 }

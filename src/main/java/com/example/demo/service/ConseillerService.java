@@ -13,7 +13,7 @@ public interface ConseillerService {
 	List<Conseiller> getAllConseillers();
 
 	Optional<ConseillerDTO> getConseillerById(Long id) throws GeneralException;
-
+	
 	ConseillerDTO createConseiller(ConseillerDTO conseillerDTO);
 
 	ConseillerDTO updateConseiller(Long id, ConseillerDTO conseillerDTO) throws GeneralException;
@@ -25,5 +25,7 @@ public interface ConseillerService {
 	String virementCourantEpargne(double montant, Client client) throws GeneralException;
 
 	String virementEpargneCourant(double montant, Client client) throws GeneralException;
+
+	Conseiller getRealConseillerById(Long conseillerId) throws GeneralException;
 
 }

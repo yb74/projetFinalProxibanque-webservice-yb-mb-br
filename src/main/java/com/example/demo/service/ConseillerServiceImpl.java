@@ -182,4 +182,13 @@ public class ConseillerServiceImpl implements ConseillerService {
 
 	}
 
+	@Override
+	public Conseiller getRealConseillerById(Long conseillerId) throws GeneralException {
+		Optional<Conseiller> optionalConseiller = conseillerRepository.findById(conseillerId);
+		if (optionalConseiller.isEmpty()) {
+			throw new GeneralException("Conseiller not found with ID: " + conseillerId);
+		}
+		return optionalConseiller.get();
+	}
+
 }

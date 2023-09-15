@@ -36,6 +36,14 @@ public class UserModel {
 		this.role = role;
 		this.conseiller = conseiller;
 	}
+//	
+//	public UserModel(Long id, String username, String password, Role role, Long conseiller) {
+//		this.id = id;
+//		this.username = username;
+//		this.password = password;
+//		this.role = role;
+//		this.conseiller = conseiller;
+//	}
 
 	public UserModel(Long id, String username, String password, Role role) {
 		this.id = id;

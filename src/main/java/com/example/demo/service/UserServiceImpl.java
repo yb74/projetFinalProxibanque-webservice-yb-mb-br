@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public UserDTO createUser(UserDTO userDTO) {
+	public UserDTO createUser(UserDTO userDTO) throws GeneralException {
 		UserModel user = userMapper.toUserModel(userDTO);
 		UserModel savedUser = userRepository.save(user);
 		UserDTO savedUserDTO = userMapper.toDTO(savedUser);
