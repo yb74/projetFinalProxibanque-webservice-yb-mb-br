@@ -9,6 +9,8 @@ public class CompteEpargneDTO {
     private double remuneration = 0.3;
     private Client client;
 
+    private String accountType;
+
     public CompteEpargneDTO() {
     }
 
@@ -18,6 +20,7 @@ public class CompteEpargneDTO {
         this.balance = balance;
         this. remuneration = remuneration;
         this.client = client;
+        this.accountType = "CompteEpargne";
     }
 
     public CompteEpargneDTO(double balance) {
