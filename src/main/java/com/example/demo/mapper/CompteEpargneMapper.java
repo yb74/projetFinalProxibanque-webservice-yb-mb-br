@@ -1,5 +1,6 @@
 package com.example.demo.mapper;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.dto.CompteEpargneDTO;
@@ -11,7 +12,7 @@ public class CompteEpargneMapper {
 
 	private final ClientService clientService;
 
-	public CompteEpargneMapper(ClientService clientService) {
+	public CompteEpargneMapper(@Lazy ClientService clientService) {
 		this.clientService = clientService;
 	}
 

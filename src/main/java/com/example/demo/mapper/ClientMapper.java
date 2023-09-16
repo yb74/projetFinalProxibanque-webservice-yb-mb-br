@@ -17,6 +17,9 @@ import com.example.demo.service.ConseillerService;
 
 @Component
 public class ClientMapper {
+	
+	@Autowired
+	private ConseillerService conseillerService;
 
 	public ClientDTO toDto(Client client) {
 		if (client == null) {
@@ -31,7 +34,7 @@ public class ClientMapper {
 		clientDTO.setZipCode(client.getZipCode());
 		clientDTO.setCity(client.getCity());
 		clientDTO.setPhoneNumber(client.getPhoneNumber());
-		clientDTO.setConseiller(client.getConseiller());
+		clientDTO.setConseillerId(client.getConseiller().getId());
 
 		CompteCourant compteCourant = client.getCompteCourant();
 		if (compteCourant != null) {
@@ -45,14 +48,20 @@ public class ClientMapper {
 	}
 
 	public Client toClient(ClientDTO clientDTO) throws GeneralException {
-		Optional<Conseiller> conseiller = Optional.of(clientDTO.getConseiller());
+		Optional<Conseiller> conseiller =conseillerService.getRealConseillerById(clientDTO.getConseillerId());
 		Optional<CompteCourant> compteCourant = Optional.of(clientDTO.getCompteCourant());
 		Optional<CompteEpargne> compteEpargne = Optional.of(clientDTO.getCompteEpargne());
 
-	    // Vérifiez si les objets sont présents dans les Optionals
-	    if (!conseiller.isPresent() || !compteCourant.isPresent() || !compteEpargne.isPresent()) {
-	        throw new GeneralException("L'un des objets associés est null.");
-	    }
+		// Vérifiez si les objets sont présents dans les Optionals
+		if (!conseiller.isPresent()) {
+			throw new GeneralException("conseiller des objets associés est null.");
+		}
+		if (!conseiller.isPresent() || !compteCourant.isPresent() || !compteEpargne.isPresent()) {
+			throw new GeneralException("L'un des objets associés est null.");
+		}
+		if (!conseiller.isPresent() || !compteCourant.isPresent() || !compteEpargne.isPresent()) {
+			throw new GeneralException("L'un des objets associés est null.");
+		}
 
 		return new Client(clientDTO.getId(), clientDTO.getName(), clientDTO.getFirstName(), clientDTO.getAdress(),
 				clientDTO.getZipCode(), clientDTO.getCity(), clientDTO.getPhoneNumber(), conseiller.get(), 
