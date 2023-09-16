@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface CompteCourantRepository extends JpaRepository<CompteCourant, Long> {
 	CompteCourant findByAccountNumber(String accountNumber);
+	CompteCourant findByClientId(Long clientId);
 }
  

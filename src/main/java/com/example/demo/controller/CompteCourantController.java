@@ -81,6 +81,11 @@ public class CompteCourantController {
     Optional<CompteCourantDTO> getCompteByAccountNumber(@RequestParam String AccountNumber) throws GeneralException {
         return compteService.getCompteByAccountNumber(AccountNumber);
     }
+    
+    @GetMapping("/client")
+    Optional<CompteCourantDTO> getCompteByClientId(@PathVariable Long clientId) throws GeneralException {
+        return compteService.getCompteByClientId(clientId);
+    }
 
     /**
      * Met à jour un compte existant ou crée un nouveau compte s'il n'existe pas.

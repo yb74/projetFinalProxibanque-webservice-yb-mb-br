@@ -31,4 +31,6 @@ public interface CompteCourantService {
     void removeCarte(CompteCourant comptec, Carte carte);
     
     Optional<CompteCourantDTO> getCompteByAccountNumber(String accountNumber);
+
+	Optional<CompteCourantDTO> getCompteByClientId(Long clientId);
 }

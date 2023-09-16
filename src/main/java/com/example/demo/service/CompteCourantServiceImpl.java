@@ -151,4 +151,10 @@ public class CompteCourantServiceImpl implements CompteCourantService {
 		CompteCourant existingCompteCourant = compteRepository.findByAccountNumber(accountNumber);
 		return Optional.of(mapper.toDto(existingCompteCourant));
 	}
+
+	@Override
+	public Optional<CompteCourantDTO> getCompteByClientId(Long clientId) {
+		CompteCourant existingCompteCourant = compteRepository.findByClientId(clientId);
+		return Optional.empty();
+	}
 }
