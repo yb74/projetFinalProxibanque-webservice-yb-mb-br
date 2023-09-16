@@ -37,7 +37,9 @@ public class TransactionServiceImpl implements TransactionService {
 				compteCourantEmetteur.setBalance(nouveauSoldeEmetteur);
 				double nouveauSoldeRecepteur = compteCourantRecepteur.getBalance() + montant;
 				compteCourantRecepteur.setBalance(nouveauSoldeRecepteur);
-				messageReponse = "Virement effectué avec succès !";
+				messageReponse = String.format("Virement effectué avec succès !  \n" +
+                        " %.2f € transférés du compte numéro %s au compte numéro %s \n" +
+                        "Nouveau solde émmetteur = %.2f \n Nouveau solde créditeur = %.2f", montant, compteCourantEmetteur.getAccountNumber(), compteCourantRecepteur.getAccountNumber(), nouveauSoldeEmetteur, nouveauSoldeRecepteur);
 				clientRepository.save(clientEmetteur);
 				clientRepository.save(clientRecepteur);
 				return messageReponse;
@@ -64,7 +66,12 @@ public class TransactionServiceImpl implements TransactionService {
 				nouveauSoldeRecepteur = client.getCompteEpargne().getBalance() + montant;
 				client.getCompteEpargne().setBalance(nouveauSoldeRecepteur);
 				clientRepository.save(client);
-				messageReponse = "Virement effectué avec succès !";
+				// messageReponse = "Virement effectué avec succès !";
+
+				messageReponse = String.format("Virement effectué avec succès !  \n" +
+						" %.2f € transférés du compte numéro %s au compte numéro %s \n" +
+						"Nouveau solde émmetteur = %.2f \n Nouveau solde créditeur = %.2f", montant, client.getCompteCourant().getAccountNumber(), client.getCompteCourant().getAccountNumber(), nouveauSoldeEmetteur, nouveauSoldeRecepteur);
+
 				return messageReponse;
 			} else {
 				messageReponse = "Solde insuffisant";
@@ -88,7 +95,11 @@ public class TransactionServiceImpl implements TransactionService {
 				double nouveauSoldeCourant = client.getCompteCourant().getBalance() + montant;
 				client.getCompteCourant().setBalance(nouveauSoldeCourant);
 				clientRepository.save(client);
-				messageReponse = "Virement effectué avec succès !";
+
+				messageReponse = String.format("Virement effectué avec succès !  \n" +
+						" %.2f € transférés du compte numéro %s au compte numéro %s \n" +
+						"Nouveau solde émmetteur = %.2f \n Nouveau solde créditeur = %.2f", montant, client.getCompteCourant().getAccountNumber(), client.getCompteCourant().getAccountNumber(), nouveauSoldeEpargne, nouveauSoldeCourant);
+
 				return messageReponse;
 			} else {
 				messageReponse = "Solde épargne insuffisant";

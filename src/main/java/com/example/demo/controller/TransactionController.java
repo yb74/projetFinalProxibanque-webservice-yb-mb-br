@@ -26,16 +26,14 @@ import com.example.demo.service.TransactionService;
 @RequestMapping("/transactions")
 public class TransactionController {
 	private final TransactionService transactionService;
-	private final ConseillerService conseillerService;
 	private final ClientService clientService;
 
 	@Autowired
 	private TransactionMapper mapper;
 
-	public TransactionController(TransactionService transactionService, ConseillerService conseillerService,
+	public TransactionController(TransactionService transactionService,
 			ClientService clientService) {
 		this.transactionService = transactionService;
-		this.conseillerService = conseillerService;
 		this.clientService = clientService;
 	}
 
@@ -63,7 +61,7 @@ public class TransactionController {
 		Optional<Client> optionalClientRecepteur = clientService.getClientById(idRecepteur);
 		Client clientEmetteur = optionalClientEmetteur.get();
 		Client clientRecepteur = optionalClientRecepteur.get();
-		return new ResponseEntity<>(conseillerService.virementComptesCourants(montant, clientEmetteur, clientRecepteur),
+		return new ResponseEntity<>(transactionService.virementComptesCourants(montant, clientEmetteur, clientRecepteur),
 				HttpStatus.OK);
 	}
 
@@ -77,14 +75,14 @@ public class TransactionController {
 				if (client.isEmpty()) {
 					throw new GeneralException("Client non trouvé");
 				}
-				return ResponseEntity.ok(conseillerService.virementCourantEpargne(montant, client.get()));
+				return ResponseEntity.ok(transactionService.virementCourantEpargne(montant, client.get()));
 			}
 			case "compteEpargneVersCompteCourant": {
 				Optional<Client> client = clientService.getClientById(idEmetteur);
 				if (client.isEmpty()) {
 					throw new GeneralException("Client non trouvé");
 				}
-				return ResponseEntity.ok(conseillerService.virementEpargneCourant(montant, client.get()));
+				return ResponseEntity.ok(transactionService.virementEpargneCourant(montant, client.get()));
 			}
 			default:
 				throw new IllegalArgumentException("Type de virement non pris en charge: " + typeVirement);

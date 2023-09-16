@@ -20,12 +20,6 @@ public interface ConseillerService {
 
 	void deleteConseiller(Long id) throws GeneralException;
 
-	String virementComptesCourants(double montant, Client clientEmetteur, Client clientRecepteur) throws GeneralException;
-
-	String virementCourantEpargne(double montant, Client client) throws GeneralException;
-
-	String virementEpargneCourant(double montant, Client client) throws GeneralException;
-
 	Optional<Conseiller> getRealConseillerById(Long conseillerId) throws GeneralException;
 	
 	ConseillerDTO login(String username, String password) throws GeneralException;
