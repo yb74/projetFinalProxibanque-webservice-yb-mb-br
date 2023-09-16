@@ -91,6 +91,13 @@ public class ClientController {
 		ClientDTO createdClient = clientService.createClientWithConseiller(client, conseillerId);
 		return new ResponseEntity<>(createdClient, HttpStatus.CREATED);
 	}
+	
+	@PostMapping("/create")
+	public ResponseEntity<ClientDTO> createClientWithConseillerWithCompteCcCp(@Valid @RequestBody ClientDTO client,
+			@RequestParam Long conseillerId) throws GeneralException {
+		ClientDTO createdClient = clientService.createClientWithConseillerWithCompteCcCp(client, conseillerId);
+		return new ResponseEntity<>(createdClient, HttpStatus.CREATED);
+	}
 
 	@PutMapping("/{clientId}")
 	public ResponseEntity<ClientDTO> updateClient(@PathVariable Long clientId, @RequestBody ClientDTO clientDto)

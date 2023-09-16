@@ -26,8 +26,8 @@ public class CompteEpargne extends Compte {
 
     public CompteEpargne(double balance) {
         super(balance);
-        this.client=new Client();
-        this.client.setCompteEpargne(this);
+//        this.client=new Client();
+//        this.client.setCompteEpargne(this);
     }
 
     public double getRemuneration() {

@@ -45,8 +45,8 @@ public class CompteCourant extends Compte {
 
 	public CompteCourant(double balance) {
 		super(balance);
-		this.client = new Client();
-		this.client.setCompteCourant(this);
+//		this.client = new Client();
+//		this.client.setCompteCourant(this);
 		this.carte = new Carte();
 		this.carte.setCompte(this);
 	}

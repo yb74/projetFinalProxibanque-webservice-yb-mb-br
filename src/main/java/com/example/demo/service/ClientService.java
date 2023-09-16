@@ -9,6 +9,8 @@ import com.example.demo.dto.ConseillerDTO;
 import com.example.demo.exception.GeneralException;
 import com.example.demo.model.Client;
 
+import jakarta.validation.Valid;
+
 public interface ClientService {
 	List<Client> getAllClients();
 
@@ -25,4 +27,6 @@ public interface ClientService {
 	void deleteClientById(Long id);
 
 	ClientDTO createClientWithConseiller(ClientDTO client, Long conseillerId) throws GeneralException;
+
+	ClientDTO createClientWithConseillerWithCompteCcCp(@Valid ClientDTO client, Long conseillerId) throws GeneralException;
 }

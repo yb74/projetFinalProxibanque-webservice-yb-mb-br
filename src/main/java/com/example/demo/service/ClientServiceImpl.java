@@ -13,9 +13,13 @@ import com.example.demo.dto.ConseillerDTO;
 import com.example.demo.exception.GeneralException;
 import com.example.demo.mapper.ClientMapper;
 import com.example.demo.model.Client;
+import com.example.demo.model.CompteCourant;
+import com.example.demo.model.CompteEpargne;
 import com.example.demo.model.Conseiller;
 import com.example.demo.repository.ClientRepository;
 import com.example.demo.repository.ConseillerRepository;
+
+import jakarta.validation.Valid;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -120,6 +124,20 @@ public class ClientServiceImpl implements ClientService {
 		client = clientRepository.save(client);
 
 		return mapper.toDto(client);
+	}
+
+	@Override
+	public ClientDTO createClientWithConseillerWithCompteCcCp(@Valid ClientDTO clientDto, Long conseillerId) throws GeneralException {
+		Conseiller conseiller = conseillerRepository.findById(conseillerId)
+				.orElseThrow(() -> new GeneralException("Conseiller with ID " + conseillerId + " not found"));
+		;
+		clientDto.setConseiller(conseiller);
+		clientDto.setCompteCourant(new CompteCourant(0.));
+		clientDto.setCompteEpargne(new CompteEpargne(0.));
+		Client client = mapper.toClient(clientDto);
+		client = clientRepository.save(client);
+		clientDto = mapper.toDto(client);
+		return clientDto;
 	}
 
 	@Override
