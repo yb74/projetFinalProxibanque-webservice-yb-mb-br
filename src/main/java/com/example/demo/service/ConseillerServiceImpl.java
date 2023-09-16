@@ -68,7 +68,7 @@ public class ConseillerServiceImpl implements ConseillerService {
 		}
 		Conseiller existingConseiller = existingConseillerOptional.get();
 		existingConseiller.setName(conseillerDTO.getName());
-		existingConseiller.setFirstName(conseillerDTO.getFirstName());
+		existingConseiller.setFirstname(conseillerDTO.getFirstname());
 		Conseiller updatedConseiller = conseillerRepository.save(existingConseiller);
 		return mapper.ToDto(updatedConseiller);
 
@@ -183,12 +183,32 @@ public class ConseillerServiceImpl implements ConseillerService {
 	}
 
 	@Override
-	public Conseiller getRealConseillerById(Long conseillerId) throws GeneralException {
+	public Optional<Conseiller> getRealConseillerById(Long conseillerId) throws GeneralException {
 		Optional<Conseiller> optionalConseiller = conseillerRepository.findById(conseillerId);
 		if (optionalConseiller.isEmpty()) {
 			throw new GeneralException("Conseiller not found with ID: " + conseillerId);
 		}
-		return optionalConseiller.get();
+		return optionalConseiller;
 	}
+	
+	@Override
+	public ConseillerDTO login(String username, String password) throws GeneralException {
+//		Boolean isUserExist = conseillerRepository.existsByUsernameAndPassword(username, password);
+		Conseiller ExistingUser = conseillerRepository.findByUsernameAndPassword(username, password);
+		if (ExistingUser == null) {
+			throw new GeneralException("User not found");
+		}
+		
+		return mapper.ToDto(ExistingUser);
+	}
+
+//	@Override
+//    public Conseiller getInfoForLogged(String username, String password) throws GeneralException {
+//		Conseiller user = conseillerRepository.findByUsernameAndPassword(username, password);
+//		if (user == null) {
+//			throw new GeneralException("User not found");
+//		}
+//        return user;
+//    }
 
 }

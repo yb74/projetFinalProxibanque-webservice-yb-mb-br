@@ -8,9 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 
 @Entity
 public class Conseiller {
@@ -19,33 +17,31 @@ public class Conseiller {
 	private Long id;
 
 	private String name;
-	private String firstName;
+	private String firstname;
+
+	private String username;
+	private String password;
 
 	@OneToMany(mappedBy = "conseiller", cascade = { CascadeType.PERSIST })
 	private Set<Client> clients = new HashSet<>();
 
-	@OneToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "user_id")
-	private UserModel user;
-
-	private Set<Long> clientsIds = new HashSet<>();
-
 	public Conseiller() {
 	}
 
-	public Conseiller(Long id, String name, String firstName, Set<Long> clientsIds) {
+	public Conseiller(Long id, String name, String firstname, String username, String password, Set<Client> clients) {
 		this.id = id;
 		this.name = name;
-		this.firstName = firstName;
-		this.clientsIds = clientsIds;
+		this.firstname = firstname;
+		this.username = username;
+		this.password = password;
+		this.clients = clients;
 	}
 
-	public Conseiller(Long id, String name, String firstName, Set<Client> clients, UserModel user) {
+	public Conseiller(Long id, String name, String firstname, Set<Client> clients) {
 		this.id = id;
 		this.name = name;
-		this.firstName = firstName;
+		this.firstname = firstname;
 		this.clients = clients;
-		this.user = user;
 	}
 
 	public Long getId() {
@@ -64,12 +60,12 @@ public class Conseiller {
 		this.name = name;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getFirstname() {
+		return firstname;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
 	}
 
 	public Set<Client> getClients() {
@@ -80,20 +76,20 @@ public class Conseiller {
 		this.clients = clients;
 	}
 
-	public UserModel getUser() {
-		return user;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUser(UserModel user) {
-		this.user = user;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
-	public Set<Long> getClientsIds() {
-		return clientsIds;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setClientsIds(Set<Long> clientsIds) {
-		this.clientsIds = clientsIds;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public void addClient(Client c) {

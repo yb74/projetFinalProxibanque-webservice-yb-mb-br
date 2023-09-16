@@ -9,9 +9,7 @@ import com.example.demo.model.Client;
 import com.example.demo.model.CompteCourant;
 import com.example.demo.model.CompteEpargne;
 import com.example.demo.model.Conseiller;
-import com.example.demo.model.Role;
 import com.example.demo.model.Transaction;
-import com.example.demo.model.UserModel;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -22,15 +20,13 @@ public class DBInit {
 	private final ConseillerRepository conseillerRepository;
 	private final ClientRepository clientRepository;
 	private final TransactionRepository transactionRepository;
-	private final UserRepository userRepository;
 
 	public DBInit(ConseillerRepository conseillerRepository, ClientRepository clientRepository,
 			CompteCourantRepository compteCourantRepository, CompteEpargneRepository compteEpargneRepository,
-			TransactionRepository transactionRepository, UserRepository userRepository) {
+			TransactionRepository transactionRepository) {
 		this.conseillerRepository = conseillerRepository;
 		this.clientRepository = clientRepository;
 		this.transactionRepository = transactionRepository;
-		this.userRepository = userRepository;
 	}
 
 	@PostConstruct
@@ -62,21 +58,18 @@ public class DBInit {
 		// Create conseillers and associate them with clients
 		Conseiller conseiller1 = new Conseiller();
 		conseiller1.setName("Smith");
-		conseiller1.setFirstName("John");
-		UserModel user1 = new UserModel("akira", "1234", Role.CONSEILLER, conseiller1);
-		conseiller1.setUser(user1);
+		conseiller1.setFirstname("John");
+		conseiller1.setUsername("Akira");
+		conseiller1.setPassword("1234");
 		conseiller1.addClient(client1);
 		conseiller1.addClient(client2);
 
 		Conseiller conseiller2 = new Conseiller();
 		conseiller2.setName("Tom");
-		conseiller2.setFirstName("Evans");
-		UserModel user2 = new UserModel("akira2", "1234", Role.GEREANT, conseiller2);
-		conseiller2.setUser(user2);
+		conseiller2.setFirstname("Evans");
+		conseiller2.setUsername("Akira2");
+		conseiller2.setPassword("1234");
 		conseiller2.addClient(client3);
-
-		userRepository.save(user1);
-		userRepository.save(user2);
 
 		// Create transactions
 		Transaction transaction1 = new Transaction();

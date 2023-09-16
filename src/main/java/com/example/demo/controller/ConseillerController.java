@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -53,6 +54,12 @@ public class ConseillerController {
 	@GetMapping("/{id}")
 	Optional<ConseillerDTO> getConseillerById(@PathVariable Long id) throws GeneralException {
 		return conseillerService.getConseillerById(id);
+	}
+	
+	@GetMapping("/login")
+	public ResponseEntity<ConseillerDTO> login(@RequestParam("username") String username,
+			@RequestParam("password") String password) throws GeneralException {
+		return new ResponseEntity<>(conseillerService.login(username, password), HttpStatus.OK);
 	}
 
 	@PostMapping

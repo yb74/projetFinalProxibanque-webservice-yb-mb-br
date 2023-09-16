@@ -2,6 +2,8 @@ package com.example.demo.dto;
 
 import java.util.Set;
 
+import com.example.demo.model.Client;
+
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,16 +14,25 @@ public class ConseillerDTO {
 	@NotEmpty(message = "the name of the conseiller is necessary")
 	private String name;
 
-	@NotEmpty(message = "the first name of the client is necessary")
-	private String firstName;
+	@NotEmpty(message = "the first name of the conseiller is necessary")
+	private String firstname;
 
-	private Set<Long> clientsIds;
+	@NotEmpty(message = "the username of the conseiller is necessary")
+	private String username;
+	
+	@NotEmpty(message = "the password of the conseiller is necessary")
+	private String password;
 
-	public ConseillerDTO(Long id, String name, String firstName, Set<Long> clientsIds) {
+	private Set<Client> clients;
+
+	public ConseillerDTO(Long id, String name, String firstname, String username, String password,
+			Set<Client> clients) {
 		this.id = id;
 		this.name = name;
-		this.firstName = firstName;
-		this.clientsIds = clientsIds;
+		this.firstname = firstname;
+		this.username = username;
+		this.password = password;
+		this.clients = clients;
 	}
 
 	public Long getId() {
@@ -40,20 +51,36 @@ public class ConseillerDTO {
 		this.name = name;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getFirstname() {
+		return firstname;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
 	}
 
-	public Set<Long> getClientsIds() {
-		return clientsIds;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setClientsIds(Set<Long> clientsIds) {
-		this.clientsIds = clientsIds;
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Set<Client> getClients() {
+		return clients;
+	}
+
+	public void setClients(Set<Client> clients) {
+		this.clients = clients;
 	}
 
 }

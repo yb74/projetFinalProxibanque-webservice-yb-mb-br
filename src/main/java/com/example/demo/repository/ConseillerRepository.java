@@ -15,7 +15,8 @@ public interface ConseillerRepository extends JpaRepository<Conseiller, Long> {
     @Query("SELECT c FROM Conseiller c WHERE SIZE(c.clients) < :maxClients")
     List<Conseiller> findByClientsSizeLessThan(int maxClients);
     
-    @Query("SELECT c FROM Conseiller c WHERE c.user.id = :id")
-    Conseiller findConseillerByUserId(@Param("id") Long id);
+//	Boolean existsByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
+	Conseiller findByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
+
     
 }

@@ -7,6 +7,8 @@ public class CompteCourantDTO {
 	private double overdraft = 1000;
 	private Long carteId;
 	private Long clientId;
+	private String clientName;
+	private String clientFirstname;
 
 	public CompteCourantDTO() {
 	}
@@ -23,13 +25,16 @@ public class CompteCourantDTO {
 //		this.client = client;
 //	}
 
-	public CompteCourantDTO(Long id, String accountNumber, double balance, double overdraft, Long carteId, Long clientId) {
+	public CompteCourantDTO(Long id, String accountNumber, double balance, double overdraft, Long carteId,
+			Long clientId, String clientName, String clientFirstname) {
 		this.id = id;
 		this.accountNumber = accountNumber;
 		this.balance = balance;
 		this.overdraft = overdraft;
 		this.carteId = carteId;
 		this.clientId = clientId;
+		this.clientFirstname = clientFirstname;
+		this.clientName = clientName;
 	}
 
 //	public CompteCourantDTO(double balance, Carte carte) {
@@ -104,4 +109,21 @@ public class CompteCourantDTO {
 	public void setAccountNumber(String accountNumber) {
 		this.accountNumber = accountNumber;
 	}
+
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+
+	public String getClientFirstname() {
+		return clientFirstname;
+	}
+
+	public void setClientFirstname(String clientFirstname) {
+		this.clientFirstname = clientFirstname;
+	}
+
 }

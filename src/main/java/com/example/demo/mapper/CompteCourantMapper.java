@@ -20,7 +20,7 @@ public class CompteCourantMapper {
 	}
 
 	public CompteCourantDTO toDto(CompteCourant c) {
-		return new CompteCourantDTO(c.getId(), c.getAccountNumber(), c.getBalance(), c.getOverdraft(), c.getCarte().getId(), c.getClient().getId());
+		return new CompteCourantDTO(c.getId(), c.getAccountNumber(), c.getBalance(), c.getOverdraft(), c.getCarte().getId(), c.getClient().getId(),c.getClient().getFirstName(),c.getClient().getName() );
 	}
 
 	public CompteCourant toCompteCourant(CompteCourantDTO compteCourantDTO) {

@@ -26,6 +26,10 @@ public interface ConseillerService {
 
 	String virementEpargneCourant(double montant, Client client) throws GeneralException;
 
-	Conseiller getRealConseillerById(Long conseillerId) throws GeneralException;
+	Optional<Conseiller> getRealConseillerById(Long conseillerId) throws GeneralException;
+	
+	ConseillerDTO login(String username, String password) throws GeneralException;
+
+//	ConseillerDTO getInfoForLogged(String username, String password) throws GeneralException;
 
 }
