@@ -82,7 +82,7 @@ public class CompteCourantController {
         return compteService.getCompteByAccountNumber(AccountNumber);
     }
     
-    @GetMapping("/client")
+    @GetMapping("/client/{clientId}")
     Optional<CompteCourantDTO> getCompteByClientId(@PathVariable Long clientId) throws GeneralException {
         return compteService.getCompteByClientId(clientId);
     }
