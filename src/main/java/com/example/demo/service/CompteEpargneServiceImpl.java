@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.CompteCourantDTO;
 import com.example.demo.dto.CompteEpargneDTO;
 import com.example.demo.dto.CreateCompteEpargneDTO;
 import com.example.demo.exception.GeneralException;
@@ -129,5 +130,17 @@ public class CompteEpargneServiceImpl implements CompteEpargneService {
 	public Optional<CompteEpargneDTO> getCompteByAccountNumber(String accountNumber) {
 		CompteEpargne existingCompteEpargne = compteRepository.findByAccountNumber(accountNumber);
 		return Optional.of(mapper.toDto(existingCompteEpargne));
+	}
+
+	@Override
+	public Optional<CompteEpargneDTO> getCompteByClientId(Long clientId) {
+	    Optional<CompteEpargne> compteEpargneOptional =Optional.of( compteRepository.findByClient_Id(clientId));
+	    if (compteEpargneOptional.isPresent()) {
+	    	CompteEpargne existingCompteCourant = compteEpargneOptional.get();
+	    	CompteEpargneDTO compteEpargneDTO = mapper.toDto(existingCompteCourant);
+	        return Optional.of(compteEpargneDTO);
+	    } else {
+	        return Optional.empty();
+	    }
 	}
 }
