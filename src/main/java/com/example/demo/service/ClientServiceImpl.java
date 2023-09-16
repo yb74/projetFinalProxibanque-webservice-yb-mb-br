@@ -131,7 +131,7 @@ public class ClientServiceImpl implements ClientService {
 		Conseiller conseiller = conseillerRepository.findById(conseillerId)
 				.orElseThrow(() -> new GeneralException("Conseiller with ID " + conseillerId + " not found"));
 		;
-		clientDto.setConseiller(conseiller);
+		clientDto.setConseillerId(conseiller.getId());
 		clientDto.setCompteCourant(new CompteCourant(0.));
 		clientDto.setCompteEpargne(new CompteEpargne(0.));
 		Client client = mapper.toClient(clientDto);

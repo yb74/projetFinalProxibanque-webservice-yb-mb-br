@@ -2,7 +2,6 @@ package com.example.demo.dto;
 
 import com.example.demo.model.CompteCourant;
 import com.example.demo.model.CompteEpargne;
-import com.example.demo.model.Conseiller;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -28,7 +27,7 @@ public class ClientDTO {
 	@NotEmpty(message = "the phone number of the client is necessary")
 	private String phoneNumber;
 
-	private Conseiller conseiller;
+	private Long conseillerId;
 	private CompteCourant compteCourant;
 	private CompteEpargne compteEpargne;
 
@@ -47,7 +46,7 @@ public class ClientDTO {
 	}
 
 	public ClientDTO(Long id, String name, String firstName, String adress, int zipCode, String city,
-			String phoneNumber, Conseiller conseiller, CompteCourant compteCourant, CompteEpargne compteEpargne) {
+			String phoneNumber, Long conseillerId, CompteCourant compteCourant, CompteEpargne compteEpargne) {
 		this.id = id;
 		this.name = name;
 		this.firstName = firstName;
@@ -55,7 +54,7 @@ public class ClientDTO {
 		this.zipCode = zipCode;
 		this.city = city;
 		this.phoneNumber = phoneNumber;
-		this.conseiller = conseiller;
+		this.conseillerId = conseillerId;
 		this.compteCourant = compteCourant;
 		this.compteEpargne = compteEpargne;
 	}
@@ -116,12 +115,12 @@ public class ClientDTO {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public Conseiller getConseiller() {
-		return conseiller;
+	public Long getConseillerId() {
+		return conseillerId;
 	}
 
-	public void setConseiller(Conseiller conseiller) {
-		this.conseiller = conseiller;
+	public void setConseillerId(Long conseillerId) {
+		this.conseillerId = conseillerId;
 	}
 
 	public CompteCourant getCompteCourant() {
