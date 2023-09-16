@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.CompteCourantDTO;
 import com.example.demo.dto.CreateCompteCourantDTO;
 import com.example.demo.exception.GeneralException;
+import com.example.demo.model.CompteCourant;
 import com.example.demo.service.CompteCourantService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/comptes/courants")
@@ -73,6 +75,11 @@ public class CompteCourantController {
     @GetMapping("/{id}")
     CompteCourantDTO getCompteById(@PathVariable Long id) throws GeneralException {
         return compteService.getCompteById(id);
+    }
+    
+    @GetMapping("/NumCompte")
+    Optional<CompteCourantDTO> getCompteByAccountNumber(@RequestParam String AccountNumber) throws GeneralException {
+        return compteService.getCompteByAccountNumber(AccountNumber);
     }
 
     /**

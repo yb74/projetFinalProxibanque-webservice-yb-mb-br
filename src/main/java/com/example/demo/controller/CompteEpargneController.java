@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.CompteCourantDTO;
 import com.example.demo.dto.CompteEpargneDTO;
 import com.example.demo.dto.CreateCompteEpargneDTO;
 import com.example.demo.exception.GeneralException;
@@ -16,6 +17,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/comptes/epargnes")
@@ -82,6 +84,11 @@ public class CompteEpargneController {
     @GetMapping("/{id}")
     CompteEpargneDTO getCompteById(@PathVariable Long id) throws GeneralException {
         return compteService.getCompteById(id);
+    }
+    
+    @GetMapping("/NumCompte")
+    Optional<CompteEpargneDTO> getCompteByAccountNumber(@RequestParam String AccountNumber) throws GeneralException {
+        return compteService.getCompteByAccountNumber(AccountNumber);
     }
 
     /**

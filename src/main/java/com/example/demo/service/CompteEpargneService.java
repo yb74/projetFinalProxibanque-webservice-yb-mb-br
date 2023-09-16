@@ -23,5 +23,7 @@ public interface CompteEpargneService {
 
     void deleteCompte(Long compteId) throws GeneralException;
 
+	Optional<CompteEpargneDTO> getCompteByAccountNumber(String accountNumber);
+
     // AuditDTO doAudit();
 }

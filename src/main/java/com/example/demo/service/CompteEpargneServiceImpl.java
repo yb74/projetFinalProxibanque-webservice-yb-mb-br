@@ -5,6 +5,7 @@ import com.example.demo.dto.CreateCompteEpargneDTO;
 import com.example.demo.exception.GeneralException;
 import com.example.demo.mapper.CompteEpargneMapper;
 import com.example.demo.model.Client;
+import com.example.demo.model.CompteCourant;
 import com.example.demo.model.CompteEpargne;
 import com.example.demo.repository.ClientRepository;
 import com.example.demo.repository.CompteEpargneRepository;
@@ -30,6 +31,9 @@ public class CompteEpargneServiceImpl implements CompteEpargneService {
 
     @Autowired
     private CompteEpargneMapper compteEpargneMapper;
+    
+    @Autowired
+    private CompteEpargneMapper mapper;
 
     public List<CompteEpargneDTO> getAllCompte() {
         List<CompteEpargne> compteEpargnes = compteRepository.findAll();
@@ -119,5 +123,11 @@ public class CompteEpargneServiceImpl implements CompteEpargneService {
 		} else {
 			return Optional.empty();
 		}
+	}
+
+	@Override
+	public Optional<CompteEpargneDTO> getCompteByAccountNumber(String accountNumber) {
+		CompteEpargne existingCompteEpargne = compteRepository.findByAccountNumber(accountNumber);
+		return Optional.of(mapper.toDto(existingCompteEpargne));
 	}
 }
