@@ -11,13 +11,11 @@ import com.example.demo.model.Client;
 import com.example.demo.model.CompteCourant;
 import com.example.demo.model.CompteEpargne;
 import com.example.demo.model.Conseiller;
-import com.example.demo.service.CompteCourantService;
-import com.example.demo.service.CompteEpargneService;
 import com.example.demo.service.ConseillerService;
 
 @Component
 public class ClientMapper {
-	
+
 	@Autowired
 	private ConseillerService conseillerService;
 
@@ -48,25 +46,26 @@ public class ClientMapper {
 	}
 
 	public Client toClient(ClientDTO clientDTO) throws GeneralException {
-		Optional<Conseiller> conseiller =conseillerService.getRealConseillerById(clientDTO.getConseillerId());
+		Optional<Conseiller> conseiller = conseillerService.getRealConseillerById(clientDTO.getConseillerId());
 		Optional<CompteCourant> compteCourant = Optional.of(clientDTO.getCompteCourant());
 		Optional<CompteEpargne> compteEpargne = Optional.of(clientDTO.getCompteEpargne());
 
 		// Vérifiez si les objets sont présents dans les Optionals
 		if (!conseiller.isPresent()) {
-			throw new GeneralException("conseiller des objets associés est null.");
+			throw new GeneralException("Le conseiller des objets associé est null.");
 		}
-		if (!conseiller.isPresent() || !compteCourant.isPresent() || !compteEpargne.isPresent()) {
-			throw new GeneralException("L'un des objets associés est null.");
+		if (!compteCourant.isPresent()) {
+			throw new GeneralException(" Le compte courant associé est null.");
 		}
-		if (!conseiller.isPresent() || !compteCourant.isPresent() || !compteEpargne.isPresent()) {
-			throw new GeneralException("L'un des objets associés est null.");
+		if (!compteEpargne.isPresent()) {
+			throw new GeneralException("Le compte épargne associé est null.");
 		}
 
 		return new Client(clientDTO.getId(), clientDTO.getName(), clientDTO.getFirstName(), clientDTO.getAdress(),
-				clientDTO.getZipCode(), clientDTO.getCity(), clientDTO.getPhoneNumber(), conseiller.get(), 
-	        compteCourant.get(), // Obtenez la valeur à partir de l'Optional
-	        compteEpargne.get() // Obtenez la valeur à partir de l'Optional
+				clientDTO.getZipCode(), clientDTO.getCity(), clientDTO.getPhoneNumber(), conseiller.get(),
+				compteCourant.get(), // Obtenez la valeur à partir de l'Optional
+				compteEpargne.get() // Obtenez la valeur à partir de l'Optional
 		);
 	}
+
 }

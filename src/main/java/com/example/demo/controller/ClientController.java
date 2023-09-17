@@ -10,6 +10,7 @@ import com.example.demo.dto.ConseillerDTO;
 import com.example.demo.exception.GeneralException;
 import com.example.demo.service.ConseillerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.origin.SystemEnvironmentOrigin;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -86,6 +87,7 @@ public class ClientController {
 	}
 
 	@PostMapping
+	
 	public ResponseEntity<ClientDTO> createClientWithConseiller(@Valid @RequestBody ClientDTO client,
 			@RequestParam Long conseillerId) throws GeneralException {
 		ClientDTO createdClient = clientService.createClientWithConseiller(client, conseillerId);
