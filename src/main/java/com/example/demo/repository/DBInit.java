@@ -77,7 +77,7 @@ public class DBInit {
 		transaction1.setClientEmetteur(client1);
 		transaction1.setCompteEmitteurId(2L);
 		transaction1.setClientRecepteur(client2);
-		transaction1.setCompteEmitteurId(1L);
+		transaction1.setCompteRecepteurId(1L);
 		transaction1.setTypeDeVirement(Transaction.TypeDeVirement.COURANT_COURANT);
 
 		Transaction transaction2 = new Transaction();
