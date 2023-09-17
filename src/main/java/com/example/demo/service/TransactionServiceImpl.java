@@ -98,7 +98,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 				messageReponse = String.format("Virement effectué avec succès !  \n" +
 						" %.2f € transférés du compte numéro %s au compte numéro %s \n" +
-						"Nouveau solde émmetteur = %.2f \n Nouveau solde créditeur = %.2f", montant, client.getCompteCourant().getAccountNumber(), client.getCompteCourant().getAccountNumber(), nouveauSoldeEpargne, nouveauSoldeCourant);
+						"Nouveau solde émmetteur = %.2f \n Nouveau solde créditeur = %.2f", montant, client.getCompteEpargne().getAccountNumber(), client.getCompteCourant().getAccountNumber(), nouveauSoldeEpargne, nouveauSoldeCourant);
 
 				return messageReponse;
 			} else {
