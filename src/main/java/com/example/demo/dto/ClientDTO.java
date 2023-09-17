@@ -33,7 +33,14 @@ public class ClientDTO {
 
 	private Long compteCourantId;
 	private Long compteEpargneId;
-
+	
+	//---------------------ajout constructor par défaut---------------------
+	public ClientDTO() {	
+		System.out.println("clientDTO");
+	}	
+	
+	
+//
 //	public ClientDTO(Long id, String name, String firstName, String adress, int zipCode, String city,
 //			String phoneNumber, Conseiller conseiller) {
 //		this.id = id;
