@@ -46,11 +46,11 @@ public class Client {
 	private Conseiller conseiller;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "clientEmetteur")
+	@OneToMany(mappedBy = "clientEmetteur",cascade = { CascadeType.REMOVE })
 	private List<Transaction> transactionsEmetteur;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "clientRecepteur")
+	@OneToMany(mappedBy = "clientRecepteur", cascade = { CascadeType.REMOVE })
 	private List<Transaction> transactionsRecepteur;
 
 	public Client() {

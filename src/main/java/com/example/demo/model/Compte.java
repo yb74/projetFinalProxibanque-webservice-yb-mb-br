@@ -4,6 +4,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.constraints.Min;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -14,6 +15,8 @@ public abstract class Compte {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String accountNumber;
+    
+    @Min(value = -1000)
     private double balance;
     private LocalDate creationDate;
 
