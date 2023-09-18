@@ -37,9 +37,9 @@ public class TransactionServiceImpl implements TransactionService {
 				compteCourantEmetteur.setBalance(nouveauSoldeEmetteur);
 				double nouveauSoldeRecepteur = compteCourantRecepteur.getBalance() + montant;
 				compteCourantRecepteur.setBalance(nouveauSoldeRecepteur);
-				messageReponse = String.format("Virement effectué avec succès !  \n" +
-                        " %.2f € transférés du compte numéro %s au compte numéro %s \n" +
-                        "Nouveau solde émmetteur = %.2f \n Nouveau solde créditeur = %.2f", montant, compteCourantEmetteur.getAccountNumber(), compteCourantRecepteur.getAccountNumber(), nouveauSoldeEmetteur, nouveauSoldeRecepteur);
+				messageReponse = String.format("Virement effectué avec succès !" +
+                        " %.2f € transférés du compte numéro %s au compte numéro %s ." +
+                        " Nouveau solde émmetteur = %.2f et Nouveau solde créditeur = %.2f", montant, compteCourantEmetteur.getAccountNumber(), compteCourantRecepteur.getAccountNumber(), nouveauSoldeEmetteur, nouveauSoldeRecepteur);
 				clientRepository.save(clientEmetteur);
 				clientRepository.save(clientRecepteur);
 				return messageReponse;
@@ -68,9 +68,9 @@ public class TransactionServiceImpl implements TransactionService {
 				clientRepository.save(client);
 				// messageReponse = "Virement effectué avec succès !";
 
-				messageReponse = String.format("Virement effectué avec succès !  \n" +
-						" %.2f € transférés du compte numéro %s au compte numéro %s \n" +
-						"Nouveau solde émmetteur = %.2f \n Nouveau solde créditeur = %.2f", montant, client.getCompteCourant().getAccountNumber(), client.getCompteCourant().getAccountNumber(), nouveauSoldeEmetteur, nouveauSoldeRecepteur);
+				messageReponse = String.format("Virement effectué avec succès !" +
+						" %.2f € transférés du compte numéro %s au compte numéro %s." +
+						" Nouveau solde émmetteur = %.2f et Nouveau solde créditeur = %.2f", montant, client.getCompteCourant().getAccountNumber(), client.getCompteCourant().getAccountNumber(), nouveauSoldeEmetteur, nouveauSoldeRecepteur);
 
 				return messageReponse;
 			} else {
@@ -96,9 +96,9 @@ public class TransactionServiceImpl implements TransactionService {
 				client.getCompteCourant().setBalance(nouveauSoldeCourant);
 				clientRepository.save(client);
 
-				messageReponse = String.format("Virement effectué avec succès !  \n" +
-						" %.2f € transférés du compte numéro %s au compte numéro %s \n" +
-						"Nouveau solde émmetteur = %.2f \n Nouveau solde créditeur = %.2f", montant, client.getCompteEpargne().getAccountNumber(), client.getCompteCourant().getAccountNumber(), nouveauSoldeEpargne, nouveauSoldeCourant);
+				messageReponse = String.format("Virement effectué avec succès !" +
+						" %.2f € transférés du compte numéro %s au compte numéro %s. " +
+						"Nouveau solde émmetteur = %.2f et Nouveau solde créditeur = %.2f", montant, client.getCompteEpargne().getAccountNumber(), client.getCompteCourant().getAccountNumber(), nouveauSoldeEpargne, nouveauSoldeCourant);
 
 				return messageReponse;
 			} else {
