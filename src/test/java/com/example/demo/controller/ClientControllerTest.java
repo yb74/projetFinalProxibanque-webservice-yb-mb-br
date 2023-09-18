@@ -46,10 +46,12 @@ public class ClientControllerTest {
 	    clientDTO.setCity("TestCity");
 	    clientDTO.setPhoneNumber("123-456-7890");
 	    clientDTO.setConseillerId(conseillerId);
-	    new CompteCourant();
-	    new CompteEpargne();
+	    clientDTO.setCompteCourant(new CompteCourant(0));
+	    clientDTO.setCompteEpargne(new CompteEpargne(0));
 	    
 	    // Affichez le clientDTO dans la console
+	    System.out.println("ClientDTO: ");
+
 	    System.out.println("ClientDTO: " + clientDTO);
 	    
 	    // Créez également un objet fictif pour la réponse attendue du service

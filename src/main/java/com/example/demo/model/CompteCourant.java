@@ -66,4 +66,11 @@ public class CompteCourant extends Compte {
 	public void setCarte(Carte carte) {
 		this.carte = carte;
 	}
+
+	@Override
+	public String toString() {
+		return "CompteCourant [overdraft=" + overdraft + ", clientId=" + client.getId() + ", carte=" + carte + "]";
+	}
+	
+	
 }

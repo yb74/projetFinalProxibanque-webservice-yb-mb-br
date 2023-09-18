@@ -35,50 +35,6 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public String virementComptesCourants(double montant, Long idEmetteur, Long idRecepteur) throws GeneralException {
-		String messageReponse;
-		if (montant > 0) {
-			Optional<CompteCourant> optionalCompteCourantEmetteur = compteCourantRepository.findById(idEmetteur);
-			Optional<CompteCourant> optionalCompteCourantRecepteur = compteCourantRepository.findById(idRecepteur);
-			if (optionalCompteCourantEmetteur.isEmpty()) {
-				messageReponse = "le compte courant émeteur n'existe pas";
-				throw new GeneralException(messageReponse);
-			}
-			if (optionalCompteCourantRecepteur.isEmpty()) {
-				messageReponse = "le compte courant recepteur n'existe pas";
-				throw new GeneralException(messageReponse);
-			}
-			CompteCourant existingCompteCourantEmetteur = optionalCompteCourantEmetteur.get();
-			CompteCourant existingCompteCourantRecepteur = optionalCompteCourantRecepteur.get();
-
-			double soldeEmetteur = existingCompteCourantEmetteur.getBalance();
-			if (montant <= soldeEmetteur || soldeEmetteur + existingCompteCourantEmetteur.getOverdraft() >= montant) {
-				double nouveauSoldeEmetteur = soldeEmetteur - montant;
-				existingCompteCourantEmetteur.setBalance(nouveauSoldeEmetteur);
-				double nouveauSoldeRecepteur = existingCompteCourantRecepteur.getBalance() + montant;
-				existingCompteCourantRecepteur.setBalance(nouveauSoldeRecepteur);
-				messageReponse = String.format(
-						"Virement effectué avec succès !"
-								+ " %.2f € transférés du compte numéro %s au compte numéro %s ."
-								+ " Nouveau solde émmetteur = %.2f et Nouveau solde créditeur = %.2f",
-						montant, existingCompteCourantEmetteur.getAccountNumber(),
-						existingCompteCourantRecepteur.getAccountNumber(), nouveauSoldeEmetteur, nouveauSoldeRecepteur);
-				Client clientEmetteur = clientRepository.findById(existingCompteCourantEmetteur.getId()).get();
-				Client clientRecepteur = clientRepository.findById(existingCompteCourantRecepteur.getId()).get();
-				clientRepository.save(clientEmetteur);
-				clientRepository.save(clientRecepteur);
-				return messageReponse;
-			} else {
-				messageReponse = "solde insuffisant";
-				throw new GeneralException(messageReponse);
-			}
-		} else {
-			messageReponse = "Le montant du virement doit être positif";
-			throw new GeneralException(messageReponse);
-		}
-	}
-
-	@Override
 	public String virementComptesCourants(double montant, Client clientEmetteur, Client clientRecepteur)
 			throws GeneralException {
 		String messageReponse;
@@ -200,14 +156,14 @@ public class TransactionServiceImpl implements TransactionService {
 				double nouveauSoldeEpargne = soldeEpargne - montant;
 				existingCompteEpargne.setBalance(nouveauSoldeEpargne);
 				double nouveauSoldeCourant = existingCompteCourant.getBalance() + montant;
-				existingCompteEpargne.setBalance(nouveauSoldeCourant);
+				existingCompteCourant.setBalance(nouveauSoldeCourant);
 				clientRepository.save(client);
 
 				messageReponse = String.format(
 						"Virement effectué avec succès !"
 								+ " %.2f € transférés du compte numéro %s au compte numéro %s. "
 								+ "Nouveau solde émmetteur = %.2f et Nouveau solde créditeur = %.2f",
-						montant, existingCompteEpargne.getAccountNumber(), existingCompteEpargne.getAccountNumber(),
+						montant, existingCompteEpargne.getAccountNumber(), existingCompteCourant.getAccountNumber(),
 						nouveauSoldeEpargne, nouveauSoldeCourant);
 
 				return messageReponse;

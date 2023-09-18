@@ -9,12 +9,10 @@ import com.example.demo.model.Transaction;
 import com.example.demo.model.Transaction.TypeDeVirement;
 
 public interface TransactionService {
-	String virementComptesCourants(double montant, Client clientEmetteur, Client clientRecepteur)
-			throws GeneralException;
-
 	String virementEpargneCourant(double montant, Long compteEpId) throws GeneralException;
 
-	Transaction createTransaction(double amount, Client clientEmetteur, Client clientRecepteur, TypeDeVirement typeDeVirement);
+	Transaction createTransaction(double amount, Client clientEmetteur, Client clientRecepteur,
+			TypeDeVirement typeDeVirement);
 
 	Optional<Transaction> getTransactionById(Long id);
 
@@ -22,5 +20,5 @@ public interface TransactionService {
 
 	String virementComptesCourants(double montant, Long idEmetteur, Long idRecepteur) throws GeneralException;
 
-	String virementCourantEpargne(double montant, Long compteCId) throws GeneralException ;
+	String virementCourantEpargne(double montant, Long compteCId) throws GeneralException;
 }
