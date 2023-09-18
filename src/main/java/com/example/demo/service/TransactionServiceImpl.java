@@ -35,12 +35,11 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public String virementComptesCourants(double montant, Client clientEmetteur, Client clientRecepteur)
-			throws GeneralException {
+	public String virementComptesCourants(double montant, Long idEmetteur, Long idRecepteur) throws GeneralException {
 		String messageReponse;
 		if (montant > 0) {
-			Optional<CompteCourant> optionalCompteCourantEmetteur = Optional.of(clientEmetteur.getCompteCourant());
-			Optional<CompteCourant> optionalCompteCourantRecepteur = Optional.of(clientRecepteur.getCompteCourant());
+			Optional<CompteCourant> optionalCompteCourantEmetteur = compteCourantRepository.findById(idEmetteur);
+			Optional<CompteCourant> optionalCompteCourantRecepteur = compteCourantRepository.findById(idRecepteur);
 			if (optionalCompteCourantEmetteur.isEmpty()) {
 				messageReponse = "le compte courant émeteur n'existe pas";
 				throw new GeneralException(messageReponse);
@@ -64,6 +63,8 @@ public class TransactionServiceImpl implements TransactionService {
 								+ " Nouveau solde émmetteur = %.2f et Nouveau solde créditeur = %.2f",
 						montant, existingCompteCourantEmetteur.getAccountNumber(),
 						existingCompteCourantRecepteur.getAccountNumber(), nouveauSoldeEmetteur, nouveauSoldeRecepteur);
+				Client clientEmetteur = clientRepository.findById(existingCompteCourantEmetteur.getId()).get();
+				Client clientRecepteur = clientRepository.findById(existingCompteCourantRecepteur.getId()).get();
 				clientRepository.save(clientEmetteur);
 				clientRepository.save(clientRecepteur);
 				return messageReponse;
