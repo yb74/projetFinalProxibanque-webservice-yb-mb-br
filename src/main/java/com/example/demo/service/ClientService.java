@@ -29,4 +29,5 @@ public interface ClientService {
 	ClientDTO createClientWithConseiller(ClientDTO client, Long conseillerId) throws GeneralException;
 
 	ClientDTO createClientWithConseillerWithCompteCcCp(@Valid ClientDTO client, Long conseillerId) throws GeneralException;
+
 }

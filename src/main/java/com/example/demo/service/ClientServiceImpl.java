@@ -99,7 +99,7 @@ public class ClientServiceImpl implements ClientService {
 
 		return clientDTOs;
 	}
-
+	
 	@Override
 	public ClientDTO createClientWithConseiller(ClientDTO clientDto, Long conseillerId) throws GeneralException {
 		Conseiller conseiller = conseillerRepository.findById(conseillerId)
