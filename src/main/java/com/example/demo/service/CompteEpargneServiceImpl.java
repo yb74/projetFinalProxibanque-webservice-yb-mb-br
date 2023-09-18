@@ -2,7 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.CompteCourantDTO;
 import com.example.demo.dto.CompteEpargneDTO;
-import com.example.demo.dto.CreateCompteEpargneDTO;
+import com.example.demo.dto.CompteEpargneDTO;
 import com.example.demo.exception.GeneralException;
 import com.example.demo.mapper.CompteEpargneMapper;
 import com.example.demo.model.Client;
@@ -102,8 +102,8 @@ public class CompteEpargneServiceImpl implements CompteEpargneService {
 //    }
 
     @Override
-    public CompteEpargneDTO createCompteWithClient(CreateCompteEpargneDTO createCompteEpargneDTO) throws GeneralException {
-        CompteEpargneDTO compteDto = createCompteEpargneDTO.getCompte();
+    public CompteEpargneDTO createCompteWithClient(CompteEpargneDTO createCompteEpargneDTO) throws GeneralException {
+        CompteEpargneDTO compteDto = new CompteEpargneDTO(0);
         Long clientId = createCompteEpargneDTO.getClientId();
 
         Client client = clientRepository.findById(clientId)

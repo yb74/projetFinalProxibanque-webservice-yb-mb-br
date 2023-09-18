@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.CompteCourantDTO;
-import com.example.demo.dto.CreateCompteCourantDTO;
+import com.example.demo.dto.CompteCourantDTO;
 import com.example.demo.exception.GeneralException;
 import com.example.demo.model.CompteCourant;
 import com.example.demo.service.CompteCourantService;
@@ -58,7 +58,7 @@ public class CompteCourantController {
      * @return Le compte créé.
      */
     @PostMapping
-    ResponseEntity<CompteCourantDTO> createCompteWithClientAndCarte(@Valid @RequestBody CreateCompteCourantDTO createCompteCourantDTO) throws GeneralException {
+    ResponseEntity<CompteCourantDTO> createCompteWithClientAndCarte(@Valid @RequestBody CompteCourantDTO createCompteCourantDTO) throws GeneralException {
         CompteCourantDTO createdCompteCourant = compteService.createCompteWithClientAndCarte(createCompteCourantDTO);
 
         return new ResponseEntity<>(createdCompteCourant, HttpStatus.CREATED);

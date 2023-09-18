@@ -2,17 +2,19 @@ package com.example.demo.dto;
 
 import com.example.demo.model.Client;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+
 public class CompteEpargneDTO {
 	private Long id;
 	private String accountNumber;
 	private double balance;
 	private double remuneration = 0.3;
-	private Long clientId;
 	private String clientName;
 	private String clientFirstname;
 
-	public CompteEpargneDTO() {
-	}
+	@NotNull(message = "CompteCourantDTO clientId field can't be null")
+	private Long clientId;
 
 	public CompteEpargneDTO(Long id, String accountNumber, double balance, double remuneration, Client client) {
 		this.id = id;
@@ -68,14 +70,6 @@ public class CompteEpargneDTO {
 		this.remuneration = remuneration;
 	}
 
-	public Long getClientId() {
-		return clientId;
-	}
-
-	public void setClientId(Long clientId) {
-		this.clientId = clientId;
-	}
-
 	public String getClientName() {
 		return clientName;
 	}
@@ -92,4 +86,11 @@ public class CompteEpargneDTO {
 		this.clientFirstname = clientFirstname;
 	}
 
+	public Long getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(Long clientId) {
+		this.clientId = clientId;
+	}
 }
