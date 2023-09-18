@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.CompteCourantDTO;
 import com.example.demo.dto.CompteEpargneDTO;
-import com.example.demo.dto.CreateCompteEpargneDTO;
+import com.example.demo.dto.CompteEpargneDTO;
 import com.example.demo.exception.GeneralException;
 import com.example.demo.service.CompteEpargneService;
 
@@ -87,11 +87,11 @@ public class CompteEpargneController {
     /**
      * Crée un nouveau compte épargne et associe un client.
      *
-     * @param CreateCompteEpargneDTO Le compte à créer et le client associé (RequestBody).
+     * @param CompteEpargneDTO Le compte à créer et le client associé (RequestBody).
      * @return Le compte créé.
      */
     @PostMapping
-    ResponseEntity<CompteEpargneDTO> createCompteWithClient(@Valid @RequestBody CreateCompteEpargneDTO createCompteEpargneDTO) throws GeneralException {
+    ResponseEntity<CompteEpargneDTO> createCompteWithClient(@Valid @RequestBody CompteEpargneDTO createCompteEpargneDTO) throws GeneralException {
         CompteEpargneDTO createdCompteCourant = compteService.createCompteWithClient(createCompteEpargneDTO);
 
         return new ResponseEntity<>(createdCompteCourant, HttpStatus.CREATED);

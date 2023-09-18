@@ -1,7 +1,15 @@
 package com.example.demo.service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.example.demo.dto.CompteCourantDTO;
-import com.example.demo.dto.CreateCompteCourantDTO;
 import com.example.demo.exception.GeneralException;
 import com.example.demo.mapper.CompteCourantMapper;
 import com.example.demo.model.Carte;
@@ -9,15 +17,8 @@ import com.example.demo.model.Client;
 import com.example.demo.model.CompteCourant;
 import com.example.demo.repository.ClientRepository;
 import com.example.demo.repository.CompteCourantRepository;
-import jakarta.transaction.Transactional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import jakarta.transaction.Transactional;
 
 @Service
 public class CompteCourantServiceImpl implements CompteCourantService {
@@ -31,7 +32,7 @@ public class CompteCourantServiceImpl implements CompteCourantService {
 
 	@Autowired
 	private CompteCourantMapper compteCourantMapper;
-	
+
 	@Autowired
 	private CompteCourantMapper mapper;
 
@@ -116,11 +117,11 @@ public class CompteCourantServiceImpl implements CompteCourantService {
 //    }
 
 	@Override
-	public CompteCourantDTO createCompteWithClientAndCarte(CreateCompteCourantDTO createCompteCourantDTO)
+	public CompteCourantDTO createCompteWithClientAndCarte(CompteCourantDTO CompteCourantDTOCreated)
 			throws GeneralException {
-		CompteCourantDTO compteDto = createCompteCourantDTO.getCompte();
-		Long clientId = createCompteCourantDTO.getClientId();
-		Carte.TypeDeCarte typeDeCarte = createCompteCourantDTO.getTypeDeCarte();
+		CompteCourantDTO compteDto = new CompteCourantDTO(0);
+		compteDto.setTypeDeCarte(Carte.TypeDeCarte.VISA_ELECTRON);
+		Long clientId = CompteCourantDTOCreated.getClientId();
 
 		Client client = clientRepository.findById(clientId)
 				.orElseThrow(() -> new GeneralException("Client with ID " + clientId + " not found"));
@@ -129,7 +130,7 @@ public class CompteCourantServiceImpl implements CompteCourantService {
 		compteCourant.setClient(client);
 		client.setCompteCourant(compteCourant);
 
-		Carte carte = new Carte(typeDeCarte);
+		Carte carte = new Carte(Carte.TypeDeCarte.VISA_ELECTRON);
 		compteCourant.setCarte(carte);
 		carte.setCompte(compteCourant);
 
@@ -154,13 +155,13 @@ public class CompteCourantServiceImpl implements CompteCourantService {
 
 	@Override
 	public Optional<CompteCourantDTO> getCompteByClientId(Long clientId) {
-	    Optional<CompteCourant> compteCourantOptional =Optional.of( compteRepository.findByClient_Id(clientId));
-	    if (compteCourantOptional.isPresent()) {
-	        CompteCourant existingCompteCourant = compteCourantOptional.get();
-	        CompteCourantDTO compteCourantDTO = mapper.toDto(existingCompteCourant);
-	        return Optional.of(compteCourantDTO);
-	    } else {
-	        return Optional.empty();
-	    }
-	 }
+		Optional<CompteCourant> compteCourantOptional = Optional.of(compteRepository.findByClient_Id(clientId));
+		if (compteCourantOptional.isPresent()) {
+			CompteCourant existingCompteCourant = compteCourantOptional.get();
+			CompteCourantDTO compteCourantDTO = mapper.toDto(existingCompteCourant);
+			return Optional.of(compteCourantDTO);
+		} else {
+			return Optional.empty();
+		}
+	}
 }

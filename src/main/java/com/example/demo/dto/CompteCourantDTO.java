@@ -1,30 +1,32 @@
 package com.example.demo.dto;
 
+import com.example.demo.model.Carte;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+
 public class CompteCourantDTO {
 	private Long id;
 	private String accountNumber;
 	private double balance;
 	private double overdraft = 1000;
 	private Long carteId;
-	private Long clientId;
 	private String clientName;
 	private String clientFirstname;
 
+	@NotNull(message = "CompteCourantDTO clientId field can't be null")
+	private Long clientId;
+
+	@NotNull(message = "CompteCourantDTO typeDeCarte field can't be null")
+	private Carte.TypeDeCarte typeDeCarte = Carte.TypeDeCarte.VISA_ELECTRON;
+
 	public CompteCourantDTO() {
 	}
-
+	
 	public CompteCourantDTO(double balance) {
 		this.balance = balance;
 	}
-
-//	public CompteCourantDTO(Long id, double balance, double overdraft, Carte carte, Client client) {
-//		this.id = id;
-//		this.balance = balance;
-//		this.overdraft = overdraft;
-//		this.carte = carte;
-//		this.client = client;
-//	}
-
+	
 	public CompteCourantDTO(Long id, String accountNumber, double balance, double overdraft, Long carteId,
 			Long clientId, String clientName, String clientFirstname) {
 		this.id = id;
@@ -37,10 +39,21 @@ public class CompteCourantDTO {
 		this.clientName = clientName;
 	}
 
-//	public CompteCourantDTO(double balance, Carte carte) {
-//		this.balance = balance;
-//		this.carte = carte;
-//	}
+	public Long getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(Long clientId) {
+		this.clientId = clientId;
+	}
+
+	public Carte.TypeDeCarte getTypeDeCarte() {
+		return typeDeCarte;
+	}
+
+	public void setTypeDeCarte(Carte.TypeDeCarte typeDeCarte) {
+		this.typeDeCarte = typeDeCarte;
+	}
 
 	public Long getId() {
 		return id;
@@ -48,6 +61,14 @@ public class CompteCourantDTO {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
 	}
 
 	public double getBalance() {
@@ -62,28 +83,8 @@ public class CompteCourantDTO {
 		return overdraft;
 	}
 
-	public void setOverdraft(int overdraft) {
+	public void setOverdraft(double overdraft) {
 		this.overdraft = overdraft;
-	}
-
-//	public Carte getCarte() {
-//		return carte;
-//	}
-//
-//	public void setCarte(Carte carte) {
-//		this.carte = carte;
-//	}
-
-//	public Client getClient() {
-//		return client;
-//	}
-//
-//	public void setClient(Client client) {
-//		this.client = client;
-//	}
-
-	public Long getClientId() {
-		return clientId;
 	}
 
 	public Long getCarteId() {
@@ -92,22 +93,6 @@ public class CompteCourantDTO {
 
 	public void setCarteId(Long carteId) {
 		this.carteId = carteId;
-	}
-
-	public void setClientId(Long clientId) {
-		this.clientId = clientId;
-	}
-
-	public void setOverdraft(double overdraft) {
-		this.overdraft = overdraft;
-	}
-
-	public String getAccountNumber() {
-		return accountNumber;
-	}
-
-	public void setAccountNumber(String accountNumber) {
-		this.accountNumber = accountNumber;
 	}
 
 	public String getClientName() {

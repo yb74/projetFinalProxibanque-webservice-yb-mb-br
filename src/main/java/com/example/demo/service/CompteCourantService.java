@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.CompteCourantDTO;
-import com.example.demo.dto.CreateCompteCourantDTO;
+import com.example.demo.dto.CompteCourantDTO;
 import com.example.demo.exception.GeneralException;
 import com.example.demo.model.Carte;
 import com.example.demo.model.CompteCourant;
@@ -18,7 +18,7 @@ public interface CompteCourantService {
 
     CompteCourantDTO createCompte(CompteCourantDTO compte);
 
-     CompteCourantDTO createCompteWithClientAndCarte(CreateCompteCourantDTO createCompteCourantDTO) throws GeneralException;
+    CompteCourantDTO createCompteWithClientAndCarte(CompteCourantDTO createCompteCourantDTO) throws GeneralException;
 
     CompteCourantDTO updateCompte(Long compteId, CompteCourantDTO compte) throws GeneralException;
 
