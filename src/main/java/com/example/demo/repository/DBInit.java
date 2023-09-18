@@ -36,14 +36,30 @@ public class DBInit {
 		CompteCourant compteC1 = new CompteCourant(30000);
 		CompteCourant compteC2 = new CompteCourant(1000);
 		CompteCourant compteC3 = new CompteCourant(200);
+
+		CompteCourant compteC4 = new CompteCourant(25696);
+		CompteCourant compteC5 = new CompteCourant(3200);
+		CompteCourant compteC6 = new CompteCourant(1240);
+		CompteCourant compteC7 = new CompteCourant(520);
+
 		CompteEpargne compteE1 = new CompteEpargne(60000);
 		CompteEpargne compteE2 = new CompteEpargne(2000);
 		CompteEpargne compteE3 = new CompteEpargne(4000);
+
+		CompteEpargne compteE4 = new CompteEpargne(75000);
+		CompteEpargne compteE5 = new CompteEpargne(32000);
+		CompteEpargne compteE6 = new CompteEpargne(10000);
+		CompteEpargne compteE7 = new CompteEpargne(25000);
 
 		// Create cards
 		Carte carte1 = new Carte(Carte.TypeDeCarte.VISA_ELECTRON, compteC1);
 		Carte carte2 = new Carte(Carte.TypeDeCarte.VISA_PREMIER, compteC2);
 		Carte carte3 = new Carte(Carte.TypeDeCarte.VISA_PREMIER, compteC3);
+
+		Carte carte4 = new Carte(Carte.TypeDeCarte.VISA_PREMIER, compteC4);
+		Carte carte5 = new Carte(Carte.TypeDeCarte.VISA_PREMIER, compteC5);
+		Carte carte6 = new Carte(Carte.TypeDeCarte.VISA_PREMIER, compteC6);
+		Carte carte7 = new Carte(Carte.TypeDeCarte.VISA_PREMIER, compteC7);
 
 //        // Save accounts and cards
 //        compteCourantRepository.saveAll(List.of(compteC1, compteC3, compteC4));
@@ -55,6 +71,11 @@ public class DBInit {
 		Client client2 = new Client("Gautier", "Martin", compteC2, compteE2);
 		Client client3 = new Client("Durant", "Bruno", compteC3, compteE3);
 
+		Client client4 = new Client("Harry", "Kane", compteC4, compteE4);
+		Client client5 = new Client("Jack", "Peterson", compteC5, compteE5);
+		Client client6 = new Client("Martin", "Céline", compteC6, compteE6);
+		Client client7 = new Client("Karine", "Smith", compteC7, compteE7);
+
 		// Create conseillers and associate them with clients
 		Conseiller conseiller1 = new Conseiller();
 		conseiller1.setName("Smith");
@@ -63,6 +84,11 @@ public class DBInit {
 		conseiller1.setPassword("1234");
 		conseiller1.addClient(client1);
 		conseiller1.addClient(client2);
+
+		conseiller1.addClient(client4);
+		conseiller1.addClient(client5);
+		conseiller1.addClient(client6);
+		conseiller1.addClient(client7);
 
 		Conseiller conseiller2 = new Conseiller();
 		conseiller2.setName("Tom");
