@@ -38,6 +38,10 @@ public class TransactionServiceImpl implements TransactionService {
 	public String virementComptesCourants(double montant, Long idEmetteur, Long idRecepteur) throws GeneralException {
 		String messageReponse;
 		if (montant > 0) {
+			if (idEmetteur == idRecepteur) {
+				messageReponse = "Les comptes de l'émetteur et du récepteur ne peuvent pas être les mêmes.";
+				throw new GeneralException(messageReponse);
+			}
 			Optional<CompteCourant> optionalCompteCourantEmetteur = compteCourantRepository.findById(idEmetteur);
 			Optional<CompteCourant> optionalCompteCourantRecepteur = compteCourantRepository.findById(idRecepteur);
 			if (optionalCompteCourantEmetteur.isEmpty()) {
