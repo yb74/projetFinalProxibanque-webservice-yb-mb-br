@@ -10,7 +10,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.TransactionDTO;
 import com.example.demo.exception.GeneralException;
@@ -18,7 +25,6 @@ import com.example.demo.mapper.TransactionMapper;
 import com.example.demo.model.Client;
 import com.example.demo.model.Transaction;
 import com.example.demo.service.ClientService;
-import com.example.demo.service.ConseillerService;
 import com.example.demo.service.TransactionService;
 
 @RestController
@@ -30,8 +36,7 @@ public class TransactionController {
 	@Autowired
 	private TransactionMapper mapper;
 
-	public TransactionController(TransactionService transactionService,
-			ClientService clientService) {
+	public TransactionController(TransactionService transactionService, ClientService clientService) {
 		this.transactionService = transactionService;
 		this.clientService = clientService;
 	}
@@ -53,43 +58,25 @@ public class TransactionController {
 		return ResponseEntity.ok(transactionDTO);
 	}
 
-	@PostMapping("ComptesCourants")
+	@PutMapping("ComptesCourants")
 	ResponseEntity<String> virementCompteCourantToCompteCourant(@RequestParam Long idEmetteur,
 			@RequestParam Long idRecepteur, @RequestParam double montant) throws GeneralException {
-		Optional<Client> optionalClientEmetteur = clientService.getClientById(idEmetteur);
-		Optional<Client> optionalClientRecepteur = clientService.getClientById(idRecepteur);
-		Client clientEmetteur = optionalClientEmetteur.get();
-		Client clientRecepteur = optionalClientRecepteur.get();
-		return new ResponseEntity<>(transactionService.virementComptesCourants(montant, clientEmetteur, clientRecepteur),
+		return new ResponseEntity<>(transactionService.virementComptesCourants(montant, idEmetteur, idRecepteur),
 				HttpStatus.OK);
 	}
 
-	@PostMapping("CourantEpargne")
+	@PutMapping("CourantEpargne")
 	public ResponseEntity<String> virement(@RequestParam Long idEmetteur, @RequestParam double montant,
 			@RequestParam String typeVirement) throws GeneralException {
-		try {
-			switch (typeVirement) {
-			case "compteCourantVersCompteEpargne": {
-				Optional<Client> client = clientService.getClientById(idEmetteur);
-				if (client.isEmpty()) {
-					throw new GeneralException("Client non trouvé");
-				}
-				return ResponseEntity.ok(transactionService.virementCourantEpargne(montant, client.get()));
-			}
-			case "compteEpargneVersCompteCourant": {
-				Optional<Client> client = clientService.getClientById(idEmetteur);
-				if (client.isEmpty()) {
-					throw new GeneralException("Client non trouvé");
-				}
-				return ResponseEntity.ok(transactionService.virementEpargneCourant(montant, client.get()));
-			}
-			default:
-				throw new IllegalArgumentException("Type de virement non pris en charge: " + typeVirement);
-			}
-		} catch (GeneralException e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		} catch (Exception e) {
-			return new ResponseEntity<>("Une erreur est survenue", HttpStatus.INTERNAL_SERVER_ERROR);
+		switch (typeVirement) {
+		case "compteCourantVersCompteEpargne": {
+			return ResponseEntity.ok(transactionService.virementCourantEpargne(montant, idEmetteur));
+		}
+		case "compteEpargneVersCompteCourant": {
+			return ResponseEntity.ok(transactionService.virementEpargneCourant(montant, idEmetteur));
+		}
+		default:
+			throw new GeneralException("Type de virement non pris en charge: " + typeVirement);
 		}
 	}
 

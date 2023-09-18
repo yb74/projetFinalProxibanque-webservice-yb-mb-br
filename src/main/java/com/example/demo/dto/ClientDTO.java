@@ -139,4 +139,11 @@ public class ClientDTO {
 		this.compteEpargne = compteEpargne;
 	}
 
+	@Override
+	public String toString() {
+		return "ClientDTO [id=" + id + ", name=" + name + ", firstName=" + firstName + ", adress=" + adress
+				+ ", zipCode=" + zipCode + ", city=" + city + ", phoneNumber=" + phoneNumber + ", conseillerId="
+				+ conseillerId + ", compteCourant=" + compteCourant + ", compteEpargne=" + compteEpargne + "]";
+	}
+
 }

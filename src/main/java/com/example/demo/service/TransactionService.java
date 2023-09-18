@@ -12,13 +12,15 @@ public interface TransactionService {
 	String virementComptesCourants(double montant, Client clientEmetteur, Client clientRecepteur)
 			throws GeneralException;
 
-	String virementCourantEpargne(double montant, Client client) throws GeneralException;
-
-	String virementEpargneCourant(double montant, Client client) throws GeneralException;
+	String virementEpargneCourant(double montant, Long compteEpId) throws GeneralException;
 
 	Transaction createTransaction(double amount, Client clientEmetteur, Client clientRecepteur, TypeDeVirement typeDeVirement);
 
 	Optional<Transaction> getTransactionById(Long id);
 
 	List<Transaction> getAllTransactions();
+
+	String virementComptesCourants(double montant, Long idEmetteur, Long idRecepteur) throws GeneralException;
+
+	String virementCourantEpargne(double montant, Long compteCId) throws GeneralException ;
 }

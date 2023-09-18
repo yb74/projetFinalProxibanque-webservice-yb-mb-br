@@ -3,14 +3,18 @@ package com.example.demo.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.exception.GeneralException;
 import com.example.demo.model.Client;
 import com.example.demo.model.CompteCourant;
+import com.example.demo.model.CompteEpargne;
 import com.example.demo.model.Transaction;
 import com.example.demo.model.Transaction.TypeDeVirement;
 import com.example.demo.repository.ClientRepository;
+import com.example.demo.repository.CompteCourantRepository;
+import com.example.demo.repository.CompteEpargneRepository;
 import com.example.demo.repository.TransactionRepository;
 
 @Service
@@ -19,27 +23,48 @@ public class TransactionServiceImpl implements TransactionService {
 	private final ClientRepository clientRepository;
 	private final TransactionRepository transactionRepository;
 
+	@Autowired
+	private CompteCourantRepository compteCourantRepository;
+
+	@Autowired
+	private CompteEpargneRepository compteEpargneRepository;
+
 	public TransactionServiceImpl(ClientRepository clientRepository, TransactionRepository transactionRepository) {
 		this.clientRepository = clientRepository;
 		this.transactionRepository = transactionRepository;
 	}
 
 	@Override
-	public String virementComptesCourants(double montant, Client clientEmetteur, Client clientRecepteur)
-			throws GeneralException {
+	public String virementComptesCourants(double montant, Long idEmetteur, Long idRecepteur) throws GeneralException {
 		String messageReponse;
 		if (montant > 0) {
-			CompteCourant compteCourantEmetteur = clientEmetteur.getCompteCourant();
-			CompteCourant compteCourantRecepteur = clientRecepteur.getCompteCourant();
-			double soldeEmetteur = compteCourantEmetteur.getBalance();
-			if (montant <= soldeEmetteur || soldeEmetteur + compteCourantEmetteur.getOverdraft() >= montant) {
+			Optional<CompteCourant> optionalCompteCourantEmetteur = compteCourantRepository.findById(idEmetteur);
+			Optional<CompteCourant> optionalCompteCourantRecepteur = compteCourantRepository.findById(idRecepteur);
+			if (optionalCompteCourantEmetteur.isEmpty()) {
+				messageReponse = "le compte courant émeteur n'existe pas";
+				throw new GeneralException(messageReponse);
+			}
+			if (optionalCompteCourantRecepteur.isEmpty()) {
+				messageReponse = "le compte courant recepteur n'existe pas";
+				throw new GeneralException(messageReponse);
+			}
+			CompteCourant existingCompteCourantEmetteur = optionalCompteCourantEmetteur.get();
+			CompteCourant existingCompteCourantRecepteur = optionalCompteCourantRecepteur.get();
+
+			double soldeEmetteur = existingCompteCourantEmetteur.getBalance();
+			if (montant <= soldeEmetteur || soldeEmetteur + existingCompteCourantEmetteur.getOverdraft() >= montant) {
 				double nouveauSoldeEmetteur = soldeEmetteur - montant;
-				compteCourantEmetteur.setBalance(nouveauSoldeEmetteur);
-				double nouveauSoldeRecepteur = compteCourantRecepteur.getBalance() + montant;
-				compteCourantRecepteur.setBalance(nouveauSoldeRecepteur);
-				messageReponse = String.format("Virement effectué avec succès !" +
-                        " %.2f € transférés du compte numéro %s au compte numéro %s ." +
-                        " Nouveau solde émmetteur = %.2f et Nouveau solde créditeur = %.2f", montant, compteCourantEmetteur.getAccountNumber(), compteCourantRecepteur.getAccountNumber(), nouveauSoldeEmetteur, nouveauSoldeRecepteur);
+				existingCompteCourantEmetteur.setBalance(nouveauSoldeEmetteur);
+				double nouveauSoldeRecepteur = existingCompteCourantRecepteur.getBalance() + montant;
+				existingCompteCourantRecepteur.setBalance(nouveauSoldeRecepteur);
+				messageReponse = String.format(
+						"Virement effectué avec succès !"
+								+ " %.2f € transférés du compte numéro %s au compte numéro %s ."
+								+ " Nouveau solde émmetteur = %.2f et Nouveau solde créditeur = %.2f",
+						montant, existingCompteCourantEmetteur.getAccountNumber(),
+						existingCompteCourantRecepteur.getAccountNumber(), nouveauSoldeEmetteur, nouveauSoldeRecepteur);
+				Client clientEmetteur = clientRepository.findById(existingCompteCourantEmetteur.getId()).get();
+				Client clientRecepteur = clientRepository.findById(existingCompteCourantRecepteur.getId()).get();
 				clientRepository.save(clientEmetteur);
 				clientRepository.save(clientRecepteur);
 				return messageReponse;
@@ -54,24 +79,87 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public String virementCourantEpargne(double montant, Client client) throws GeneralException {
+	public String virementComptesCourants(double montant, Client clientEmetteur, Client clientRecepteur)
+			throws GeneralException {
 		String messageReponse;
 		if (montant > 0) {
-			double soldeEmetteur = client.getCompteCourant().getBalance();
+			Optional<CompteCourant> optionalCompteCourantEmetteur = Optional.of(clientEmetteur.getCompteCourant());
+			Optional<CompteCourant> optionalCompteCourantRecepteur = Optional.of(clientRecepteur.getCompteCourant());
+			if (optionalCompteCourantEmetteur.isEmpty()) {
+				messageReponse = "le compte courant émeteur n'existe pas";
+				throw new GeneralException(messageReponse);
+			}
+			if (optionalCompteCourantRecepteur.isEmpty()) {
+				messageReponse = "le compte courant recepteur n'existe pas";
+				throw new GeneralException(messageReponse);
+			}
+			CompteCourant existingCompteCourantEmetteur = optionalCompteCourantEmetteur.get();
+			CompteCourant existingCompteCourantRecepteur = optionalCompteCourantRecepteur.get();
+
+			double soldeEmetteur = existingCompteCourantEmetteur.getBalance();
+			if (montant <= soldeEmetteur || soldeEmetteur + existingCompteCourantEmetteur.getOverdraft() >= montant) {
+				double nouveauSoldeEmetteur = soldeEmetteur - montant;
+				existingCompteCourantEmetteur.setBalance(nouveauSoldeEmetteur);
+				double nouveauSoldeRecepteur = existingCompteCourantRecepteur.getBalance() + montant;
+				existingCompteCourantRecepteur.setBalance(nouveauSoldeRecepteur);
+				messageReponse = String.format(
+						"Virement effectué avec succès !"
+								+ " %.2f € transférés du compte numéro %s au compte numéro %s ."
+								+ " Nouveau solde émmetteur = %.2f et Nouveau solde créditeur = %.2f",
+						montant, existingCompteCourantEmetteur.getAccountNumber(),
+						existingCompteCourantRecepteur.getAccountNumber(), nouveauSoldeEmetteur, nouveauSoldeRecepteur);
+				clientRepository.save(clientEmetteur);
+				clientRepository.save(clientRecepteur);
+				return messageReponse;
+			} else {
+				messageReponse = "solde insuffisant";
+				throw new GeneralException(messageReponse);
+			}
+		} else {
+			messageReponse = "Le montant du virement doit être positif";
+			throw new GeneralException(messageReponse);
+		}
+	}
+
+	@Override
+	public String virementCourantEpargne(double montant, Long compteCId) throws GeneralException {
+		String messageReponse;
+		if (montant > 0) {
+			Optional<CompteCourant> optionalCompteCourant = compteCourantRepository.findById(compteCId);
+			if (optionalCompteCourant.isEmpty()) {
+				messageReponse = "le compte courant émeteur n'existe pas";
+				throw new GeneralException(messageReponse);
+			}
+			CompteCourant existingCompteCourant = optionalCompteCourant.get();
+
+			Optional<Client> optionalClient = clientRepository.findById(existingCompteCourant.getId());
+			Client client = optionalClient.get();
+
+			Optional<CompteEpargne> optionalCompteEpargne = Optional.of(client.getCompteEpargne());
+			if (optionalCompteEpargne.isEmpty()) {
+				messageReponse = "le compte épargne récepteur n'existe pas";
+				throw new GeneralException(messageReponse);
+			}
+
+			CompteEpargne existingCompteEpargne = optionalCompteEpargne.get();
+
+			double soldeEmetteur = existingCompteCourant.getBalance();
 			double nouveauSoldeEmetteur;
 			double nouveauSoldeRecepteur;
-			if (soldeEmetteur >= montant || soldeEmetteur + client.getCompteCourant().getOverdraft() >= montant) {
+			if (soldeEmetteur >= montant || soldeEmetteur + existingCompteCourant.getOverdraft() >= montant) {
 				nouveauSoldeEmetteur = soldeEmetteur - montant;
-				client.getCompteCourant().setBalance(nouveauSoldeEmetteur);
-				nouveauSoldeRecepteur = client.getCompteEpargne().getBalance() + montant;
-				client.getCompteEpargne().setBalance(nouveauSoldeRecepteur);
+				existingCompteCourant.setBalance(nouveauSoldeEmetteur);
+				nouveauSoldeRecepteur = existingCompteEpargne.getBalance() + montant;
+				existingCompteEpargne.setBalance(nouveauSoldeRecepteur);
+
 				clientRepository.save(client);
-				// messageReponse = "Virement effectué avec succès !";
 
-				messageReponse = String.format("Virement effectué avec succès !" +
-						" %.2f € transférés du compte numéro %s au compte numéro %s." +
-						" Nouveau solde émmetteur = %.2f et Nouveau solde créditeur = %.2f", montant, client.getCompteCourant().getAccountNumber(), client.getCompteCourant().getAccountNumber(), nouveauSoldeEmetteur, nouveauSoldeRecepteur);
-
+				messageReponse = String.format(
+						"Virement effectué avec succès !"
+								+ " %.2f € transférés du compte numéro %s au compte numéro %s."
+								+ " Nouveau solde émmetteur = %.2f et Nouveau solde créditeur = %.2f",
+						montant, existingCompteCourant.getAccountNumber(), existingCompteEpargne.getAccountNumber(),
+						nouveauSoldeEmetteur, nouveauSoldeRecepteur);
 				return messageReponse;
 			} else {
 				messageReponse = "Solde insuffisant";
@@ -85,20 +173,42 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public String virementEpargneCourant(double montant, Client client) throws GeneralException {
+	public String virementEpargneCourant(double montant, Long compteEpId) throws GeneralException {
 		String messageReponse;
+		Optional<CompteEpargne> optionalCompteEpargne = compteEpargneRepository.findById(compteEpId);
+
+		if (optionalCompteEpargne.isEmpty()) {
+			messageReponse = "le compte épargne émeteur n'existe pas";
+			throw new GeneralException(messageReponse);
+		}
+		CompteEpargne existingCompteEpargne = optionalCompteEpargne.get();
+
+		Optional<Client> optionalClient = clientRepository.findById(existingCompteEpargne.getId());
+		Client client = optionalClient.get();
+
+		Optional<CompteCourant> optionalCompteCourant = Optional.of(client.getCompteCourant());
+		if (optionalCompteCourant.isEmpty()) {
+			messageReponse = "le compte courant récepteur n'existe pas";
+			throw new GeneralException(messageReponse);
+		}
+
+		CompteCourant existingCompteCourant = optionalCompteCourant.get();
+
 		if (montant > 0) {
-			double soldeEpargne = client.getCompteEpargne().getBalance();
+			double soldeEpargne = existingCompteEpargne.getBalance();
 			if (montant <= soldeEpargne) {
 				double nouveauSoldeEpargne = soldeEpargne - montant;
-				client.getCompteEpargne().setBalance(nouveauSoldeEpargne);
-				double nouveauSoldeCourant = client.getCompteCourant().getBalance() + montant;
-				client.getCompteCourant().setBalance(nouveauSoldeCourant);
+				existingCompteEpargne.setBalance(nouveauSoldeEpargne);
+				double nouveauSoldeCourant = existingCompteCourant.getBalance() + montant;
+				existingCompteEpargne.setBalance(nouveauSoldeCourant);
 				clientRepository.save(client);
 
-				messageReponse = String.format("Virement effectué avec succès !" +
-						" %.2f € transférés du compte numéro %s au compte numéro %s. " +
-						"Nouveau solde émmetteur = %.2f et Nouveau solde créditeur = %.2f", montant, client.getCompteEpargne().getAccountNumber(), client.getCompteCourant().getAccountNumber(), nouveauSoldeEpargne, nouveauSoldeCourant);
+				messageReponse = String.format(
+						"Virement effectué avec succès !"
+								+ " %.2f € transférés du compte numéro %s au compte numéro %s. "
+								+ "Nouveau solde émmetteur = %.2f et Nouveau solde créditeur = %.2f",
+						montant, existingCompteEpargne.getAccountNumber(), existingCompteEpargne.getAccountNumber(),
+						nouveauSoldeEpargne, nouveauSoldeCourant);
 
 				return messageReponse;
 			} else {
@@ -115,16 +225,17 @@ public class TransactionServiceImpl implements TransactionService {
 	public List<Transaction> getAllTransactions() {
 		return transactionRepository.findAll();
 	}
-	
-    @Override
-    public Optional<Transaction> getTransactionById(Long id) {
-        return transactionRepository.findById(id);
-    }
-	
-    @Override
-    public Transaction createTransaction(double amount, Client clientEmetteur, Client clientRecepteur, TypeDeVirement typeDeVirement) {
-        Transaction transaction = new Transaction(amount, clientEmetteur, clientRecepteur, typeDeVirement);
-        return transactionRepository.save(transaction);
-    }
+
+	@Override
+	public Optional<Transaction> getTransactionById(Long id) {
+		return transactionRepository.findById(id);
+	}
+
+	@Override
+	public Transaction createTransaction(double amount, Client clientEmetteur, Client clientRecepteur,
+			TypeDeVirement typeDeVirement) {
+		Transaction transaction = new Transaction(amount, clientEmetteur, clientRecepteur, typeDeVirement);
+		return transactionRepository.save(transaction);
+	}
 
 }
