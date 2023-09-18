@@ -65,8 +65,19 @@ public class TransactionServiceImpl implements TransactionService {
 						existingCompteCourantRecepteur.getAccountNumber(), nouveauSoldeEmetteur, nouveauSoldeRecepteur);
 				Client clientEmetteur = clientRepository.findById(existingCompteCourantEmetteur.getId()).get();
 				Client clientRecepteur = clientRepository.findById(existingCompteCourantRecepteur.getId()).get();
+				
+				Transaction transaction1 = new Transaction();
+				transaction1.setAmount(montant);
+				transaction1.setClientEmetteur(clientEmetteur);
+				transaction1.setCompteEmitteurId(existingCompteCourantEmetteur.getId());
+				transaction1.setClientRecepteur(clientRecepteur);
+				transaction1.setCompteRecepteurId(existingCompteCourantRecepteur.getId());
+				transaction1.setTypeDeVirement(Transaction.TypeDeVirement.COURANT_COURANT);
+				
 				clientRepository.save(clientEmetteur);
 				clientRepository.save(clientRecepteur);
+				transactionRepository.save(transaction1);
+
 				return messageReponse;
 			} else {
 				messageReponse = "solde insuffisant";
@@ -108,8 +119,17 @@ public class TransactionServiceImpl implements TransactionService {
 				existingCompteCourant.setBalance(nouveauSoldeEmetteur);
 				nouveauSoldeRecepteur = existingCompteEpargne.getBalance() + montant;
 				existingCompteEpargne.setBalance(nouveauSoldeRecepteur);
-
+				
+				Transaction transaction1 = new Transaction();
+				transaction1.setAmount(montant);
+				transaction1.setClientEmetteur(client);
+				transaction1.setCompteEmitteurId(existingCompteCourant.getId());
+				transaction1.setClientRecepteur(client);
+				transaction1.setCompteRecepteurId(existingCompteEpargne.getId());
+				transaction1.setTypeDeVirement(Transaction.TypeDeVirement.COURANT_EPARGNE);
+				
 				clientRepository.save(client);
+				transactionRepository.save(transaction1);
 
 				messageReponse = String.format(
 						"Virement effectué avec succès !"
@@ -166,7 +186,18 @@ public class TransactionServiceImpl implements TransactionService {
 								+ "Nouveau solde émmetteur = %.2f et Nouveau solde créditeur = %.2f",
 						montant, existingCompteEpargne.getAccountNumber(), existingCompteCourant.getAccountNumber(),
 						nouveauSoldeEpargne, nouveauSoldeCourant);
-
+				
+				Transaction transaction1 = new Transaction();
+				transaction1.setAmount(montant);
+				transaction1.setClientEmetteur(client);
+				transaction1.setCompteEmitteurId(existingCompteEpargne.getId());
+				transaction1.setClientRecepteur(client);
+				transaction1.setCompteRecepteurId(existingCompteCourant.getId());
+				transaction1.setTypeDeVirement(Transaction.TypeDeVirement.EPARGNE_COURANT);
+				
+				clientRepository.save(client);
+				transactionRepository.save(transaction1);
+				
 				return messageReponse;
 			} else {
 				messageReponse = "Solde épargne insuffisant";
