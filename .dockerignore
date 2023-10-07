@@ -1,0 +1,12 @@
+# Exclude development and build-related files
+build
+*.war
+*.ear
+
+# Exclude version control files
+.git
+.gitignore
+
+# Exclude IDE-specific files and directories
+.vscode
+.idea
